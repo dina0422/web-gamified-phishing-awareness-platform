@@ -1,0 +1,158 @@
+[gd_scene load_steps=9 format=3 uid="uid://bsyhtk5uragqi"]
+
+[ext_resource type="Script" uid="uid://btns15l3qy1wl" path="res://scenes/menu/name_input.gd" id="1_0o451"]
+[ext_resource type="Texture2D" uid="uid://bgu74ogq6w6c0" path="res://assets/background.png" id="1_ohw4f"]
+[ext_resource type="FontFile" uid="uid://dvliwf4sqt3hy" path="res://assets/fonts/Minecraft.ttf" id="2_0o451"]
+[ext_resource type="Texture2D" uid="uid://be18a840g6ogj" path="res://assets/symbol_icons/Big (120x120) PNG/Black/Arrow Left_Black.png" id="4_tly2t"]
+[ext_resource type="Texture2D" uid="uid://dwtilhk1kenj" path="res://assets/symbol_icons/Big (120x120) PNG/Black/Arrow Right_Black.png" id="5_4rncc"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0o451"]
+texture = ExtResource("1_ohw4f")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7mv8l"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(1, 1, 1, 0.9647059)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84o1y"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 5
+shadow_color = Color(0, 0, 0, 0.34117648)
+shadow_size = 5
+
+[node name="name_input" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0o451")
+
+[node name="Panel" type="Panel" parent="."]
+z_index = -5
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -50.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_0o451")
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="."]
+auto_translate_mode = 1
+z_index = 5
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -47.0
+offset_top = -43.0
+offset_right = 87.15588
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.82380545, 0.74746865)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_offset_x = 10
+theme_override_fonts/font = ExtResource("2_0o451")
+theme_override_font_sizes/font_size = 20
+text = "Your Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="back_button" type="Button" parent="Label"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.068
+anchor_top = 0.407
+anchor_right = 0.068
+anchor_bottom = 0.407
+offset_left = -20.0475
+offset_top = -7.2655954
+offset_right = 107.9525
+offset_bottom = 120.734406
+scale = Vector2(0.14498001, 0.13765766)
+icon = ExtResource("4_tly2t")
+
+[node name="next_button" type="Button" parent="Label"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.089
+anchor_top = 0.476
+anchor_right = 0.105000004
+anchor_bottom = 0.476
+offset_left = 115.5174
+offset_top = -12.08028
+offset_right = 241.37091
+offset_bottom = 115.91972
+scale = Vector2(0.14498001, 0.13765766)
+icon = ExtResource("5_4rncc")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+z_index = 5
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.0
+offset_top = 4.0
+offset_right = 121.5
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.62753975, 0.65816176)
+theme_override_constants/separation = 10
+
+[node name="TextEdit" type="TextEdit" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 10.6
+theme_override_colors/search_result_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0.2977069, 0.29770628, 0.2977064, 0.6)
+theme_override_fonts/font = ExtResource("2_0o451")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_7mv8l")
+placeholder_text = "Eg. Dina"
+
+[node name="enter" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 2.31
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_0o451")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/normal = SubResource("StyleBoxFlat_84o1y")
+text = "Enter"
+
+[connection signal="pressed" from="Label/back_button" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="Label/next_button" to="." method="_on_next_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/enter" to="." method="_on_button_pressed"]

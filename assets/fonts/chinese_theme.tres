@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cuirr822md84d"]
+
+[ext_resource type="FontFile" uid="uid://ccfr2ibfkkrx0" path="res://assets/fonts/NotoSansSC-VariableFont_wght.ttf" id="1_vvhdq"]
+
+[resource]
+Button/fonts/font = ExtResource("1_vvhdq")
+Label/fonts/font = ExtResource("1_vvhdq")
