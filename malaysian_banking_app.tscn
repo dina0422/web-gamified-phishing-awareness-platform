@@ -1,0 +1,500 @@
+[gd_scene load_steps=2 format=3 uid="uid://t7qjgl1cxrqu"]
+
+[sub_resource type="GDScript" id="GDScript_qa1g4"]
+script/source = "extends Control
+
+# Malaysian Banking App Phishing Simulation
+# Simulates fake banking apps that trick users
+
+signal answer_selected(is_correct: bool)
+
+var user_answered := false
+
+func _ready() -> void:
+	pass
+
+func _on_safe_button_pressed() -> void:
+	if user_answered:
+		return
+	
+	user_answered = true
+	show_feedback(false)
+	answer_selected.emit(false)
+
+func _on_unsafe_button_pressed() -> void:
+	if user_answered:
+		return
+	
+	user_answered = true
+	show_feedback(true)
+	answer_selected.emit(true)
+
+func show_feedback(is_correct: bool) -> void:
+	var feedback_panel = Panel.new()
+	feedback_panel.set_anchors_preset(Control.PRESET_CENTER)
+	feedback_panel.position = Vector2(200, 100)
+	feedback_panel.size = Vector2(700, 550)
+	add_child(feedback_panel)
+	
+	var feedback_container = VBoxContainer.new()
+	feedback_container.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	feedback_panel.add_child(feedback_container)
+	
+	var margin = MarginContainer.new()
+	margin.set(\"theme_override_constants/margin_left\", 30)
+	margin.set(\"theme_override_constants/margin_top\", 30)
+	margin.set(\"theme_override_constants/margin_right\", 30)
+	margin.set(\"theme_override_constants/margin_bottom\", 30)
+	feedback_container.add_child(margin)
+	
+	var content = VBoxContainer.new()
+	margin.add_child(content)
+	
+	var title = Label.new()
+	title.add_theme_font_size_override(\"font_size\", 24)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	
+	if is_correct:
+		title.text = \"✅ BETUL! Ini App Phishing!\"
+		title.add_theme_color_override(\"font_color\", Color(0, 0.7, 0))
+	else:
+		title.text = \"❌ Salah! Ini App Palsu!\"
+		title.add_theme_color_override(\"font_color\", Color(0.8, 0, 0))
+	
+	content.add_child(title)
+	
+	var spacer1 = Control.new()
+	spacer1.custom_minimum_size = Vector2(0, 20)
+	content.add_child(spacer1)
+	
+	var feedback_text = RichTextLabel.new()
+	feedback_text.custom_minimum_size = Vector2(0, 300)
+	feedback_text.bbcode_enabled = true
+	feedback_text.fit_content = true
+	
+	if is_correct:
+		feedback_text.text = \"\"\"[color=#000000][b]Kenapa ini app phishing/palsu?[/b]
+
+[color=#ff0000]1. Banner amaran yang mencurigakan:[/color]
+   • Bank sebenar TIDAK akan guna banner merah menakutkan
+   • \"Kemaskini sekarang\" adalah taktik pressure
+   • App rasmi tidak memaksa user update maklumat secara tiba-tiba
+
+[color=#ff0000]2. Design yang kurang profesional:[/color]
+   • Warna yang terlalu terang (kuning terang bukan branding Maybank)
+   • Font dan spacing tidak konsisten
+   • Butang yang mencurigakan
+
+[color=#ff0000]3. Permintaan maklumat yang tidak perlu:[/color]
+   • \"Kemaskini maklumat\" tanpa sebab yang jelas
+   • Bank tidak akan minta update secara paksa dalam app
+
+[color=#ff0000]4. App mungkin fake/clone:[/color]
+   • Mungkin dimuat turun dari sumber tidak rasmi
+   • Bukan dari Google Play Store / Apple App Store yang sah
+   • Logo dan nama serupa tapi bukan yang asli
+
+[b]Cara melindungi diri:[/b]
+✓ Muat turun app HANYA dari store rasmi (Google Play, App Store)
+✓ Semak nama developer (contoh: Malayan Banking Berhad)
+✓ Baca review dan rating app dengan teliti
+✓ Semak bilangan muat turun (app rasmi ada jutaan download)
+✓ Tengok permission yang diminta - jangan bagi akses yang tidak perlu
+✓ Jika ragu, uninstall app dan muat turun semula dari store rasmi[/color]\"\"\"
+	else:
+		feedback_text.text = \"\"\"[color=#000000][b]Ini BUKAN app yang selamat! Perhatikan tanda-tanda ini:[/b]
+
+🚩 [color=#ff0000]Banner amaran yang mendesak[/color]
+   • \"AMARAN KESELAMATAN\" dengan warna merah
+   • Taktik menakutkan untuk buat user panik
+   • Bank sebenar tidak guna cara begini
+
+🚩 [color=#ff0000]Design yang tidak profesional[/color]
+   • Warna header terlalu terang (bukan branding Maybank yang sebenar)
+   • Layout yang mencurigakan
+   • Button \"KEMASKINI SEKARANG\" yang memaksa
+
+🚩 [color=#ff0000]Permintaan update maklumat secara tiba-tiba[/color]
+   • Tiada sebab yang jelas
+   • \"Aktiviti luar biasa\" tanpa detail
+   • Memaksa user untuk bertindak segera
+
+🚩 [color=#ff0000]Mungkin fake app/clone[/color]
+   • Boleh jadi dimuat turun dari sumber tidak rasmi
+   • Bukan dari Google Play / App Store yang sah
+
+[b]Bagaimana app phishing berfungsi:[/b]
+• Scammer buat app yang serupa dengan bank sebenar
+• Upload ke website palsu atau store third-party
+• User yang tak perasan muat turun app palsu
+• App minta login dengan username/password
+• Scammer curi maklumat login
+• Wang dalam akaun bank dicuri
+
+[b]Cara elak app phishing:[/b]
+1. Muat turun app HANYA dari store rasmi
+2. Semak nama developer dengan teliti
+3. Baca review - jika ramai complain, jangan install
+4. Tengok bilangan download (app bank ada berjuta download)
+5. Jika app minta permission pelik, uninstall terus
+6. Guna two-factor authentication (2FA) di app bank
+7. Jika ragu-ragu, hubungi bank untuk sahkan[/color]\"\"\"
+	
+	content.add_child(feedback_text)
+	
+	var spacer2 = Control.new()
+	spacer2.custom_minimum_size = Vector2(0, 10)
+	content.add_child(spacer2)
+	
+	var close_button = Button.new()
+	close_button.text = \"Tutup\"
+	close_button.custom_minimum_size = Vector2(150, 40)
+	close_button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	close_button.pressed.connect(func(): 
+		feedback_panel.queue_free()
+	)
+	content.add_child(close_button)
+
+# Load different fake banking app scenarios
+func load_scenario(scenario_id: int) -> void:
+	match scenario_id:
+		0:
+			load_maybank_fake_app()
+		1:
+			load_cimb_fake_app()
+		2:
+			load_public_bank_fake_app()
+		_:
+			load_maybank_fake_app()
+
+func load_maybank_fake_app() -> void:
+	# Default scenario, already loaded
+	pass
+
+func load_cimb_fake_app() -> void:
+	var logo = $PhoneFrame/Screen/BankingAppUI/Header/Logo
+	var header_bg = $PhoneFrame/Screen/BankingAppUI/Header/ColorRect
+	var alert_title = $PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer/AlertTitle
+	var alert_text = $PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer/AlertText
+	
+	logo.text = \"🔴 CIMB Clicks\"
+	header_bg.color = Color(0.8, 0, 0)
+	alert_title.text = \"⚠️ AKAUN ANDA DISEKAT\"
+	alert_text.text = \"Sila sahkan identiti anda untuk membuka semula akaun dalam masa 1 jam.\"
+
+func load_public_bank_fake_app() -> void:
+	var logo = $PhoneFrame/Screen/BankingAppUI/Header/Logo
+	var header_bg = $PhoneFrame/Screen/BankingAppUI/Header/ColorRect
+	var alert_title = $PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer/AlertTitle
+	var alert_text = $PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer/AlertText
+	
+	logo.text = \"🔵 PBe\"
+	header_bg.color = Color(0, 0.3, 0.8)
+	alert_title.text = \"🔐 PENGESAHAN DIPERLUKAN\"
+	alert_text.text = \"Untuk keselamatan akaun, sila masukkan TAC yang dihantar ke telefon anda.\"
+"
+
+[node name="MalaysianBankingApp" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_qa1g4")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.9, 0.9, 0.9, 1)
+
+[node name="PhoneFrame" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -400.0
+offset_right = 200.0
+offset_bottom = 400.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="PhoneFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Screen" type="Panel" parent="PhoneFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BankingAppUI" type="VBoxContainer" parent="PhoneFrame/Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatusBar" type="Panel" parent="PhoneFrame/Screen/BankingAppUI"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="PhoneFrame/Screen/BankingAppUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 1)
+
+[node name="StatusLabel" type="Label" parent="PhoneFrame/Screen/BankingAppUI/StatusBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 11
+text = "   09:41     4G     🔋 85%"
+
+[node name="Header" type="Panel" parent="PhoneFrame/Screen/BankingAppUI"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="PhoneFrame/Screen/BankingAppUI/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.8, 0, 1)
+
+[node name="Logo" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Header"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -15.0
+offset_right = 75.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "🐯 Maybank2u"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" type="ColorRect" parent="PhoneFrame/Screen/BankingAppUI"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="PhoneFrame/Screen/BankingAppUI/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AlertBanner" type="Panel" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.2, 0.2, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer"]
+layout_mode = 2
+
+[node name="AlertTitle" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "⚠️ AMARAN KESELAMATAN"
+
+[node name="AlertText" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "Aktiviti luar biasa dikesan pada akaun anda. Sila kemaskini maklumat segera."
+autowrap_mode = 3
+
+[node name="UpdateButton" type="Button" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AlertBanner/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "KEMASKINI SEKARANG"
+
+[node name="Spacer1" type="Control" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="AccountInfo" type="MarginContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_right = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AccountInfo"]
+layout_mode = 2
+
+[node name="AccountLabel" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AccountInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 12
+text = "Akaun Semasa"
+
+[node name="AccountNumber" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AccountInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "1234 5678 9012"
+
+[node name="BalanceLabel" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AccountInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "Baki Tersedia"
+
+[node name="Balance" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/AccountInfo/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 28
+text = "RM 8,452.30"
+
+[node name="Spacer2" type="Control" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="QuestionPanel" type="Panel" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Question" type="Label" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 14
+text = "Adakah app ini selamat untuk digunakan?"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="SafeButton" type="Button" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(140, 45)
+layout_mode = 2
+text = "✅ Selamat"
+
+[node name="UnsafeButton" type="Button" parent="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(140, 45)
+layout_mode = 2
+text = "🚫 Tidak Selamat"
+
+[node name="InfoPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -350.0
+offset_top = -120.0
+offset_right = 350.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="InfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="TipsLabel" type="Label" parent="InfoPanel/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "💡 Semak tanda-tanda phishing app:
+• URL dalam banner amaran
+• Kualiti design yang rendah
+• Permintaan maklumat peribadi secara tiba-tiba
+• Domain atau nama app yang tidak tepat"
+autowrap_mode = 3
+
+[connection signal="pressed" from="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer/ButtonsContainer/SafeButton" to="." method="_on_safe_button_pressed"]
+[connection signal="pressed" from="PhoneFrame/Screen/BankingAppUI/Content/ScrollContainer/VBoxContainer/QuestionPanel/MarginContainer/VBoxContainer/ButtonsContainer/UnsafeButton" to="." method="_on_unsafe_button_pressed"]

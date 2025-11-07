@@ -1,0 +1,187 @@
+[gd_scene format=3 uid="uid://drb0x67rrx21x"]
+
+[node name="MalaysianEmailClient" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.95, 0.95, 0.95, 1)
+
+[node name="EmailWindow" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -350.0
+offset_right = 500.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="EmailWindow"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="Panel" parent="EmailWindow/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="EmailWindow/VBoxContainer/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="EmailWindow/VBoxContainer/Header/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 20
+
+[node name="Logo" type="Label" parent="EmailWindow/VBoxContainer/Header/HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.4, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "📧 MalaysianMail"
+
+[node name="EmailContent" type="VBoxContainer" parent="EmailWindow/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="EmailWindow/VBoxContainer/EmailContent"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="EmailDetails" type="VBoxContainer" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer"]
+layout_mode = 2
+
+[node name="FromLabel" type="Label" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Dari: maybank-security@maybank-verify.com"
+
+[node name="SubjectLabel" type="Label" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 18
+text = "🚨 TINDAKAN SEGERA DIPERLUKAN - Akaun Anda Disekat"
+
+[node name="HSeparator" type="HSeparator" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+layout_mode = 2
+
+[node name="Spacer1" type="Control" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="EmailBody" type="RichTextLabel" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+bbcode_enabled = true
+text = "[color=#000000]Tuan/Puan Yang Dihormati,
+
+Kami telah mengesan aktiviti yang mencurigakan dalam akaun Maybank2u anda. Untuk keselamatan anda, kami telah [color=#ff0000][b]MENYEKAT AKAUN ANDA BUAT SEMENTARA[/b][/color].
+
+[b]Butiran Transaksi Mencurigakan:[/b]
+• Lokasi: Luar Negara (Nigeria)
+• Jumlah: RM 15,750.00
+• Tarikh: Hari ini, 3:42 AM
+
+[color=#ff6600][b]⚠️ KLIK PAUTAN DI BAWAH DALAM MASA 24 JAM untuk mengesahkan identiti anda atau akaun akan ditutup secara kekal:[/b][/color]
+
+[url]www.maybank-verify-account.com/secure-login[/url]
+
+Terima kasih atas kerjasama anda.
+
+Maybank Security Team
+[i]Email ini dijana secara automatik. Sila jangan balas.[/i][/color]"
+
+[node name="Spacer2" type="Control" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ActionButtons" type="HBoxContainer" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails"]
+layout_mode = 2
+alignment = 1
+
+[node name="PhishingButton" type="Button" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails/ActionButtons"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/icon_normal_color = Color(0.8, 0, 0, 1)
+theme_override_font_sizes/font_size = 16
+text = "🎣 Ini Phishing!"
+
+[node name="Spacer" type="Control" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails/ActionButtons"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="LegitButton" type="Button" parent="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails/ActionButtons"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "✅ Ini Sah"
+
+[node name="MalaysianElements" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -150.0
+offset_right = 300.0
+offset_bottom = -20.0
+grow_vertical = 0
+
+[node name="TimeLabel" type="Label" parent="MalaysianElements"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "⏰ Masa: 14:30 WIB (Waktu Malaysia)"
+
+[node name="LocationLabel" type="Label" parent="MalaysianElements"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "📍 Lokasi: Kuala Lumpur, Malaysia"
+
+[node name="TipsPanel" type="Panel" parent="MalaysianElements"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="TipsLabel" type="Label" parent="MalaysianElements/TipsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 11
+text = "💡 Tips: Semak domain email!
+Maybank yang sah: @maybank2u.com.my
+Bukan: @maybank-verify.com"
+autowrap_mode = 3
+
+[connection signal="pressed" from="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails/ActionButtons/PhishingButton" to="." method="_on_phishing_button_pressed"]
+[connection signal="pressed" from="EmailWindow/VBoxContainer/EmailContent/MarginContainer/EmailDetails/ActionButtons/LegitButton" to="." method="_on_legit_button_pressed"]

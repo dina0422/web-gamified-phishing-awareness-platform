@@ -1,0 +1,396 @@
+[gd_scene load_steps=2 format=3 uid="uid://ma7a1qsnue0q"]
+
+[sub_resource type="GDScript" id="GDScript_7q40j"]
+script/source = "extends Node2D
+
+# Example RPG Game with iPhone Phishing Alerts
+# Demonstrates how to integrate the iPhone overlay into your game
+
+@onready var player = $GameWorld/Player
+@onready var iphone = $iPhoneOverlay
+@onready var score_label = $UI/ScorePanel/MarginContainer/VBoxContainer/ScoreValue
+@onready var alerts_label = $UI/ScorePanel/MarginContainer/VBoxContainer/AlertsLabel
+
+const PLAYER_SPEED = 300.0
+
+var score = 0
+var alerts_detected = 0
+var game_paused = false
+
+func _ready() -> void:
+	# Set up collision shapes for trigger zones
+	setup_trigger_zones()
+	
+	print(\"🎮 RPG Phishing Game Started!\")
+	print(\"Walk around and wait for phone notifications...\")
+
+func setup_trigger_zones() -> void:
+	# Create circular collision shapes for each trigger zone
+	for zone in $GameWorld/TriggerZones.get_children():
+		var shape = CircleShape2D.new()
+		shape.radius = 100.0
+		zone.get_node(\"CollisionShape2D\").shape = shape
+
+func _process(delta: float) -> void:
+	if game_paused:
+		return
+	
+	handle_player_movement(delta)
+
+func handle_player_movement(delta: float) -> void:
+	var velocity = Vector2.ZERO
+	
+	# Get input
+	if Input.is_action_pressed(\"ui_right\") or Input.is_key_pressed(KEY_D):
+		velocity.x += 1
+	if Input.is_action_pressed(\"ui_left\") or Input.is_key_pressed(KEY_A):
+		velocity.x -= 1
+	if Input.is_action_pressed(\"ui_down\") or Input.is_key_pressed(KEY_S):
+		velocity.y += 1
+	if Input.is_action_pressed(\"ui_up\") or Input.is_key_pressed(KEY_W):
+		velocity.y -= 1
+	
+	# Normalize and apply speed
+	if velocity.length() > 0:
+		velocity = velocity.normalized() * PLAYER_SPEED
+	
+	# Move player
+	player.position += velocity * delta
+	
+	# Keep player in bounds
+	player.position.x = clamp(player.position.x, 0, 1920)
+	player.position.y = clamp(player.position.y, 0, 1080)
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"ui_accept\"):  # SPACE key
+		# Trigger random phishing alert
+		trigger_random_alert()
+	
+	# Number keys for specific scenarios
+	if event is InputEventKey and event.pressed:
+		match event.keycode:
+			KEY_1:
+				trigger_specific_alert(\"email\", \"maybank\")
+			KEY_2:
+				trigger_specific_alert(\"whatsapp\", \"rhb\")
+			KEY_3:
+				trigger_specific_alert(\"banking\", \"maybank\")
+
+func trigger_random_alert() -> void:
+	print(\"📱 Triggering random phishing alert...\")
+	iphone.trigger_random_malaysian_phishing()
+	alerts_detected += 1
+	update_ui()
+
+func trigger_specific_alert(app_type: String, scenario: String) -> void:
+	var scenarios_map = {
+		\"email_maybank\": {
+			\"app_type\": \"email\",
+			\"app_name\": \"Maybank2u\",
+			\"title\": \"🚨 Amaran Keselamatan\",
+			\"body\": \"Akaun anda disekat kerana aktiviti mencurigakan...\",
+			\"icon\": \"🏦\"
+		},
+		\"whatsapp_rhb\": {
+			\"app_type\": \"whatsapp\",
+			\"app_name\": \"WhatsApp\",
+			\"title\": \"RHB Bank\",
+			\"body\": \"Sila kemaskini maklumat akaun dalam masa 2 jam...\",
+			\"icon\": \"💬\"
+		},
+		\"banking_maybank\": {
+			\"app_type\": \"banking\",
+			\"app_name\": \"Maybank2u\",
+			\"title\": \"Pengesahan Diperlukan\",
+			\"body\": \"Log masuk untuk kemaskini maklumat keselamatan...\",
+			\"icon\": \"🏦\"
+		}
+	}
+	
+	var key = app_type + \"_\" + scenario
+	if scenarios_map.has(key):
+		iphone.trigger_phishing_alert(scenarios_map[key])
+		alerts_detected += 1
+		update_ui()
+
+# === TRIGGER ZONE CALLBACKS ===
+
+func _on_work_desk_entered(body: Node2D) -> void:
+	if body == player:
+		print(\"💼 Arrived at work desk - checking emails...\")
+		# Trigger email phishing after a short delay
+		await get_tree().create_timer(2.0).timeout
+		trigger_specific_alert(\"email\", \"maybank\")
+
+func _on_pantry_entered(body: Node2D) -> void:
+	if body == player:
+		print(\"☕ In the pantry - checking phone...\")
+		# Trigger WhatsApp phishing
+		await get_tree().create_timer(1.5).timeout
+		trigger_random_alert()
+
+func _on_meeting_room_entered(body: Node2D) -> void:
+	if body == player:
+		print(\"🚪 Entering meeting room - phone buzzes...\")
+		# Trigger banking app phishing
+		await get_tree().create_timer(1.0).timeout
+		trigger_specific_alert(\"banking\", \"maybank\")
+
+# === IPHONE OVERLAY CALLBACKS ===
+
+func _on_notification_tapped(app_type: String) -> void:
+	print(\"📱 User tapped notification - opening \", app_type)
+	game_paused = true
+
+func _on_phone_closed() -> void:
+	print(\"📱 Phone closed - resuming game\")
+	game_paused = false
+
+# === AUTOMATIC PHISHING TRIGGERS ===
+
+func _on_phishing_trigger_timer_timeout() -> void:
+	# Automatically trigger phishing every 15 seconds (for testing)
+	if not game_paused:
+		trigger_random_alert()
+
+# === SCORING SYSTEM ===
+
+func update_ui() -> void:
+	score_label.text = str(score)
+	alerts_label.text = \"Alerts Detected: %d\" % alerts_detected
+
+func add_score(points: int) -> void:
+	score += points
+	update_ui()
+
+# === EXAMPLE GAME PROGRESSION ===
+
+func on_phishing_correctly_identified() -> void:
+	add_score(10)
+	print(\"✅ Correct! +10 points\")
+
+func on_phishing_incorrectly_identified() -> void:
+	add_score(-5)
+	print(\"❌ Wrong! -5 points\")
+
+# === SAVE/LOAD GAME STATE ===
+
+func save_game_state() -> void:
+	var save_data = {
+		\"score\": score,
+		\"alerts_detected\": alerts_detected,
+		\"player_position\": {
+			\"x\": player.position.x,
+			\"y\": player.position.y
+		}
+	}
+	
+	# Save to file or Firebase
+	print(\"💾 Saving game state: \", save_data)
+
+func load_game_state(save_data: Dictionary) -> void:
+	score = save_data.get(\"score\", 0)
+	alerts_detected = save_data.get(\"alerts_detected\", 0)
+	
+	if save_data.has(\"player_position\"):
+		player.position.x = save_data.player_position.x
+		player.position.y = save_data.player_position.y
+	
+	update_ui()
+	print(\"📂 Loaded game state\")
+"
+
+[node name="RPGGame" type="Node2D"]
+script = SubResource("GDScript_7q40j")
+
+[node name="GameWorld" type="Node2D" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="GameWorld"]
+offset_right = 1159.0
+offset_bottom = 666.0
+color = Color(0.6, 0.7, 0.5, 1)
+
+[node name="OfficeBackground" type="Label" parent="GameWorld"]
+offset_left = 50.0
+offset_top = 50.0
+offset_right = 500.0
+offset_bottom = 150.0
+theme_override_font_sizes/font_size = 32
+text = "🏢 Office Environment
+Walk around to explore..."
+
+[node name="Player" type="CharacterBody2D" parent="GameWorld"]
+position = Vector2(960, 540)
+
+[node name="Sprite" type="ColorRect" parent="GameWorld/Player"]
+offset_left = -25.0
+offset_top = -25.0
+offset_right = 25.0
+offset_bottom = 25.0
+color = Color(0, 0.5, 1, 1)
+
+[node name="PlayerLabel" type="Label" parent="GameWorld/Player"]
+offset_left = -30.0
+offset_top = -50.0
+offset_right = 30.0
+offset_bottom = -30.0
+text = "You"
+horizontal_alignment = 1
+
+[node name="TriggerZones" type="Node2D" parent="GameWorld"]
+
+[node name="WorkDesk" type="Area2D" parent="GameWorld/TriggerZones"]
+position = Vector2(199, 267)
+
+[node name="ColorRect" type="ColorRect" parent="GameWorld/TriggerZones/WorkDesk"]
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
+color = Color(0.6, 0.4, 0.2, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="GameWorld/TriggerZones/WorkDesk"]
+offset_left = -60.0
+offset_top = -10.0
+offset_right = 60.0
+offset_bottom = 13.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "💻 Work Desk"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld/TriggerZones/WorkDesk"]
+
+[node name="Pantry" type="Area2D" parent="GameWorld/TriggerZones"]
+position = Vector2(706, 226)
+
+[node name="ColorRect" type="ColorRect" parent="GameWorld/TriggerZones/Pantry"]
+offset_left = -80.0
+offset_top = -80.0
+offset_right = 80.0
+offset_bottom = 80.0
+color = Color(0.8, 0.6, 0.4, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="GameWorld/TriggerZones/Pantry"]
+offset_left = -60.0
+offset_top = -10.0
+offset_right = 60.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "☕ Pantry"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld/TriggerZones/Pantry"]
+
+[node name="MeetingRoom" type="Area2D" parent="GameWorld/TriggerZones"]
+position = Vector2(687, 478)
+
+[node name="ColorRect" type="ColorRect" parent="GameWorld/TriggerZones/MeetingRoom"]
+offset_left = -100.0
+offset_top = -80.0
+offset_right = 100.0
+offset_bottom = 80.0
+color = Color(0.4, 0.5, 0.7, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="GameWorld/TriggerZones/MeetingRoom"]
+offset_left = -80.0
+offset_top = -10.0
+offset_right = 80.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "🚪 Meeting Room"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameWorld/TriggerZones/MeetingRoom"]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Instructions" type="Panel" parent="UI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+offset_right = 500.0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/Instructions"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Instructions/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="UI/Instructions/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🎮 Controls"
+
+[node name="Label" type="Label" parent="UI/Instructions/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "WASD / Arrow Keys - Move
+SPACE - Trigger Random Alert
+1, 2, 3 - Specific Scenarios"
+autowrap_mode = 3
+
+[node name="ScorePanel" type="Panel" parent="UI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_bottom = 150.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/ScorePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/ScorePanel/MarginContainer"]
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="UI/ScorePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "📊 Score"
+
+[node name="ScoreValue" type="Label" parent="UI/ScorePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.7, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "0"
+horizontal_alignment = 1
+
+[node name="AlertsLabel" type="Label" parent="UI/ScorePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Alerts Detected: 0"
+
+[node name="PhishingTriggerTimer" type="Timer" parent="."]
+wait_time = 15.0
+autostart = true
+
+[connection signal="body_entered" from="GameWorld/TriggerZones/WorkDesk" to="." method="_on_work_desk_entered"]
+[connection signal="body_entered" from="GameWorld/TriggerZones/Pantry" to="." method="_on_pantry_entered"]
+[connection signal="body_entered" from="GameWorld/TriggerZones/MeetingRoom" to="." method="_on_meeting_room_entered"]
+[connection signal="timeout" from="PhishingTriggerTimer" to="." method="_on_phishing_trigger_timer_timeout"]

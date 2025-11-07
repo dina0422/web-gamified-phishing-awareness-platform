@@ -1,0 +1,166 @@
+[gd_scene load_steps=20 format=3 uid="uid://byucili8b7gwl"]
+
+[ext_resource type="Texture2D" uid="uid://be5jg61qaenlb" path="res://assets/app icon/mae.png" id="1_m8qsm"]
+[ext_resource type="Texture2D" uid="uid://cgj1w6dklrsk2" path="res://assets/app icon/gmail.png" id="3_7tdhb"]
+[ext_resource type="Texture2D" uid="uid://qegtkwm40au1" path="res://assets/app icon/ms.png" id="4_a3lai"]
+[ext_resource type="Texture2D" uid="uid://dklodcxshvfwm" path="res://assets/app icon/call.png" id="5_56ike"]
+[ext_resource type="Texture2D" uid="uid://vy3rmwja15es" path="res://assets/app icon/safari.png" id="6_snfjk"]
+[ext_resource type="Texture2D" uid="uid://b652i3kg68j6f" path="res://assets/app icon/im.png" id="7_1uwj0"]
+[ext_resource type="Texture2D" uid="uid://clsd5gy623pw3" path="res://assets/app icon/spotify.png" id="8_fyp6e"]
+[ext_resource type="Texture2D" uid="uid://dyenyq5ul45rw" path="res://assets/app icon/wifi-signal.png" id="9_3c2fs"]
+[ext_resource type="Texture2D" uid="uid://34gu4j50o42m" path="res://assets/app icon/signal.png" id="10_a3lai"]
+[ext_resource type="Texture2D" uid="uid://chwx7f5ur1c2i" path="res://assets/app icon/battery.png" id="11_56ike"]
+[ext_resource type="Texture2D" uid="uid://dcl8pshxj12ae" path="res://PixelArt Phone.png" id="12_56ike"]
+[ext_resource type="Texture2D" uid="uid://c5rr7npvhq0su" path="res://assets/app_icons/Small (24x24) PNG/AirBnB.png" id="13_snfjk"]
+[ext_resource type="Texture2D" uid="uid://c0dxwy76j34gb" path="res://assets/app_icons/Small (24x24) PNG/Duolingo.png" id="14_jmv0r"]
+[ext_resource type="Texture2D" uid="uid://bmy2l622ulg7i" path="res://assets/app_icons/Small (24x24) PNG/Discord.png" id="15_vs0ue"]
+[ext_resource type="Texture2D" uid="uid://blr213s7oh1wt" path="res://assets/app_icons/Small (24x24) PNG/Gmail.png" id="16_dc167"]
+[ext_resource type="Texture2D" uid="uid://chj7boqxxxkhv" path="res://assets/app_icons/Small (24x24) PNG/LinkedIn.png" id="17_1bsoe"]
+[ext_resource type="Texture2D" uid="uid://bewexyx2ghp8c" path="res://assets/app_icons/Small (24x24) PNG/Spotify.png" id="18_4cqv0"]
+[ext_resource type="Texture2D" uid="uid://b7b22w3jpuo0d" path="res://assets/app_icons/Small (24x24) PNG/Whatsapp.png" id="19_5gtjc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmv0r"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+corner_detail = 5
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="mae" type="TextureButton" parent="."]
+offset_left = 417.0
+offset_top = 143.0
+offset_right = 1017.0
+offset_bottom = 743.0
+scale = Vector2(0.05, 0.044)
+texture_normal = ExtResource("1_m8qsm")
+
+[node name="gmail" type="TextureButton" parent="."]
+z_index = 1
+offset_left = 424.0
+offset_top = -59.999996
+offset_right = 936.0
+offset_bottom = 452.0
+scale = Vector2(0.05, 0.044)
+texture_normal = ExtResource("3_7tdhb")
+
+[node name="teams" type="TextureButton" parent="."]
+offset_left = 338.0
+offset_top = 149.0
+offset_right = 850.0
+offset_bottom = 661.0
+scale = Vector2(0.05, 0.044)
+texture_normal = ExtResource("4_a3lai")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 416.0
+offset_top = 551.0
+offset_right = 740.0
+offset_bottom = 617.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jmv0r")
+
+[node name="phone" type="TextureButton" parent="Panel"]
+layout_mode = 0
+offset_left = 17.0
+offset_top = 12.0
+offset_right = 529.0
+offset_bottom = 524.0
+scale = Vector2(0.1, 0.088)
+texture_normal = ExtResource("5_56ike")
+
+[node name="safari" type="TextureButton" parent="Panel"]
+layout_mode = 0
+offset_left = 82.0
+offset_top = 8.0
+offset_right = 594.0
+offset_bottom = 520.0
+scale = Vector2(0.114, 0.1)
+texture_normal = ExtResource("6_snfjk")
+
+[node name="im" type="TextureButton" parent="Panel"]
+layout_mode = 0
+offset_left = 161.0
+offset_top = 7.0
+offset_right = 673.0
+offset_bottom = 519.0
+scale = Vector2(0.114, 0.1)
+texture_normal = ExtResource("7_1uwj0")
+
+[node name="spotify" type="TextureButton" parent="Panel"]
+layout_mode = 0
+offset_left = 246.0
+offset_top = 7.0
+offset_right = 758.0
+offset_bottom = 519.0
+scale = Vector2(0.114, 0.1)
+texture_normal = ExtResource("8_fyp6e")
+
+[node name="WifiSignal" type="Sprite2D" parent="."]
+position = Vector2(677.50006, 44.000015)
+scale = Vector2(0.04785165, 0.04492188)
+texture = ExtResource("9_3c2fs")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 428.0
+offset_top = 34.0
+offset_right = 469.0
+offset_bottom = 83.0
+text = "1:36
+"
+
+[node name="Signal" type="Sprite2D" parent="."]
+position = Vector2(643.5, 44.000015)
+scale = Vector2(0.060546845, 0.045898434)
+texture = ExtResource("10_a3lai")
+
+[node name="Battery" type="Sprite2D" parent="."]
+position = Vector2(711.50006, 44.000015)
+scale = Vector2(0.06152381, 0.050781313)
+texture = ExtResource("11_56ike")
+
+[node name="PixelArtPhone" type="Sprite2D" parent="."]
+z_index = -5
+position = Vector2(158, 90)
+scale = Vector2(2.8369782, 2.5157151)
+texture = ExtResource("12_56ike")
+
+[node name="AirBnB" type="Sprite2D" parent="."]
+position = Vector2(150, 42.000004)
+scale = Vector2(0.7083333, 0.625)
+texture = ExtResource("13_snfjk")
+
+[node name="Duolingo" type="Sprite2D" parent="."]
+position = Vector2(170, 41.999996)
+scale = Vector2(0.7083333, 0.5833333)
+texture = ExtResource("14_jmv0r")
+
+[node name="Discord" type="Sprite2D" parent="."]
+position = Vector2(129.00002, 42.000004)
+scale = Vector2(0.6666667, 0.625)
+texture = ExtResource("15_vs0ue")
+
+[node name="Gmail" type="Sprite2D" parent="."]
+position = Vector2(129.5, 63.75)
+scale = Vector2(0.541667, 0.52083325)
+texture = ExtResource("16_dc167")
+
+[node name="LinkedIn" type="Sprite2D" parent="."]
+position = Vector2(190, 42)
+scale = Vector2(0.625, 0.625)
+texture = ExtResource("17_1bsoe")
+
+[node name="Spotify" type="Sprite2D" parent="."]
+position = Vector2(130.75, 162.25)
+scale = Vector2(0.6874999, 0.60416687)
+texture = ExtResource("18_4cqv0")
+
+[node name="Whatsapp" type="Sprite2D" parent="."]
+position = Vector2(150, 64)
+scale = Vector2(0.5833333, 0.63541675)
+texture = ExtResource("19_5gtjc")

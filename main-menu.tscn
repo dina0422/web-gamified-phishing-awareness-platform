@@ -1,0 +1,149 @@
+[gd_scene load_steps=10 format=3 uid="uid://8xij64lva8yl"]
+
+[ext_resource type="Theme" uid="uid://cuirr822md84d" path="res://assets/fonts/chinese_theme.tres" id="1_holw3"]
+[ext_resource type="Texture2D" uid="uid://bgu74ogq6w6c0" path="res://assets/background.png" id="1_j3jwc"]
+[ext_resource type="Script" uid="uid://cquqw5kv1ucws" path="res://main_menu.gd" id="1_mue8r"]
+[ext_resource type="FontFile" uid="uid://dvliwf4sqt3hy" path="res://assets/fonts/Minecraft.ttf" id="2_mue8r"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_holw3"]
+texture = ExtResource("1_j3jwc")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3jwc"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.41)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mue8r"]
+bg_color = Color(0.6113596, 0.6113596, 0.6113596, 1)
+draw_center = false
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.41)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_holw3"]
+bg_color = Color(0.51718444, 0.5171845, 0.5171844, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_size = 5
+shadow_offset = Vector2(0, 3.41)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_j3jwc"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_holw3")
+script = ExtResource("1_mue8r")
+
+[node name="Panel" type="Panel" parent="."]
+z_index = -5
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -50.0
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_holw3")
+
+[node name="Label" type="Label" parent="."]
+auto_translate_mode = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = -78.0
+offset_right = 97.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_offset_x = 10
+theme_override_fonts/font = ExtResource("2_mue8r")
+theme_override_font_sizes/font_size = 10
+text = "welcome_message"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+z_index = 5
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.52400005
+anchor_top = 0.624
+anchor_right = 0.52400005
+anchor_bottom = 0.624
+offset_left = -75.36005
+offset_top = -61.64
+offset_right = 53.639954
+offset_bottom = 43.36
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 11
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_mue8r")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_j3jwc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mue8r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_holw3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_j3jwc")
+text = "Get Started"
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_mue8r")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_j3jwc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mue8r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_holw3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_j3jwc")
+text = "Tukar bahasa (BM/EN)"
+
+[node name="Button3" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_mue8r")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_j3jwc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mue8r")
+theme_override_styles/hover = SubResource("StyleBoxFlat_holw3")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_j3jwc")
+text = "EXIT"
+
+[connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_language_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button3" to="." method="_on_exit_pressed"]
