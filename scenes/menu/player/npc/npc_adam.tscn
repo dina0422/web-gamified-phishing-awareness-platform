@@ -1,0 +1,100 @@
+[gd_scene load_steps=13 format=3 uid="uid://e20s754wnbp0"]
+
+[ext_resource type="Texture2D" uid="uid://tpddrg6h06" path="res://Modern tiles_Free/Characters_free/Adam_phone_16x16.png" id="1_hirod"]
+[ext_resource type="Script" uid="uid://bjijugbwc5kbi" path="res://player/npc/npc_adam.gd" id="1_wajsl"]
+[ext_resource type="PackedScene" uid="uid://d2gdcys3td10y" path="res://interaction_Components/interactable.tscn" id="3_dun3m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hirod"]
+size = Vector2(13, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qxri6"]
+size = Vector2(14.223921, 17.254787)
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wajsl"]
+animation = &"look phone"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_wajsl"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_wajsl")
+blend_point_0/pos = Vector2(0, 0)
+min_space = Vector2(-1, -1.1)
+max_space = Vector2(1, 1.1)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_dun3m"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_wajsl"]
+states/Start/position = Vector2(200, 99.75)
+states/idle/node = SubResource("AnimationNodeBlendSpace2D_wajsl")
+states/idle/position = Vector2(360.06226, 94.99998)
+transitions = ["Start", "idle", SubResource("AnimationNodeStateMachineTransition_dun3m")]
+graph_offset = Vector2(-201.93774, -1.9112136e-05)
+
+[sub_resource type="Animation" id="Animation_wajsl"]
+resource_name = "look phone"
+length = 3.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(-0.099999994, 0.33333334, 0.73333335, 1.1, 1.5333333, 1.9666667, 2.3666666, 2.7666667, 3.1666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8]
+}
+
+[sub_resource type="Animation" id="Animation_dun3m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qxri6"]
+_data = {
+&"RESET": SubResource("Animation_dun3m"),
+&"look phone": SubResource("Animation_wajsl")
+}
+
+[node name="npc adam" type="CharacterBody2D"]
+script = ExtResource("1_wajsl")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1.4999998, 4.499999)
+scale = Vector2(0.8125, 0.71875)
+texture = ExtResource("1_hirod")
+hframes = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 7.5)
+shape = SubResource("RectangleShape2D_hirod")
+
+[node name="Interactable" parent="." instance=ExtResource("3_dun3m")]
+interact_name = "Talk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactable"]
+position = Vector2(-1.5, 7.638894)
+scale = Vector2(0.91395336, 0.96913475)
+shape = SubResource("RectangleShape2D_qxri6")
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource("AnimationNodeStateMachine_wajsl")
+anim_player = NodePath("../AnimationPlayer")
+parameters/idle/blend_position = Vector2(0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_qxri6")
+}

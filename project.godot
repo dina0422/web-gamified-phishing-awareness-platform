@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]
 
-Firebase="*res://firebase.gd"
+Firebase="*res://scripts/firebase_manager.gd"
 
 [display]
 

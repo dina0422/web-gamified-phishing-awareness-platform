@@ -26,6 +26,7 @@ var translations: Dictionary = {
 var welcome_label
 var start_button
 var language_button
+var restart_button
 var exit_button
 
 func _ready() -> void:
@@ -41,10 +42,11 @@ func _ready() -> void:
 			welcome_label = child
 	
 	# Assign buttons (assuming order: Start, Language, Exit)
-	if buttons.size() >= 3:
+	if buttons.size() >= 4:
 		start_button = buttons[0]
 		language_button = buttons[1]
-		exit_button = buttons[2]
+		restart_button = buttons[2]
+		exit_button = buttons[3]
 	
 	# Try to find the welcome label if not found yet
 	if not welcome_label:
@@ -55,6 +57,8 @@ func _ready() -> void:
 		start_button.pressed.connect(_on_start_pressed)
 	if language_button:
 		language_button.pressed.connect(_on_language_pressed)
+	if restart_button:
+		restart_button.pressed.connect(_on_restart_pressed)
 	if exit_button:
 		exit_button.pressed.connect(_on_exit_pressed)
 	
@@ -112,12 +116,24 @@ func update_ui_text():
 				language_button.text = "语言：中文"
 				
 const NAME_INPUT_SCENE := "res://scenes/menu/name_input.tscn"
+const ROLE_SELECTION_SCENE := "res://scenes/menu/role_selection.tscn" 
 
 func _on_start_pressed() -> void:
-	print("Start pressed")
-	var err := get_tree().change_scene_to_file(NAME_INPUT_SCENE)
-	if err != OK:
-		push_error("Failed to change scene (%s): %s" % [NAME_INPUT_SCENE, err])
+	# 1) Anonymous sign-in (reuses session if already exists)
+	var ok = await Firebase.sign_in_anonymous()
+	if not ok:
+		push_error("Sign-in failed. Check API key / internet.")
+		return
+
+	# 2) If we already have a local display name, skip name input
+	var local = Firebase._load_profile_local()
+	if Firebase.display_name != "":
+		get_tree().change_scene_to_file(ROLE_SELECTION_SCENE)
+	elif local.has("displayName") and str(local["displayName"]).strip_edges() != "":
+		Firebase.display_name = str(local["displayName"])
+		get_tree().change_scene_to_file(ROLE_SELECTION_SCENE)
+	else:
+		get_tree().change_scene_to_file(NAME_INPUT_SCENE)
 		
 func _on_language_pressed() -> void:
 	print("Language button pressed!")
@@ -132,6 +148,21 @@ func _on_language_pressed() -> void:
 	# Update all UI text
 	update_ui_text()
 
+func _on_restart_pressed()-> void:
+	var dialog = ConfirmationDialog.new()
+	
+	dialog.dialog_text = "Clear all data and start fresh?"
+	dialog.confirmed.connect(
+		func():
+		DirAccess.remove_absolute("user://fbase_session.json")
+		DirAccess.remove_absolute("user://profile.json")
+		Firebase.uid = ""	
+		Firebase.display_name = ""
+		print("✅ Reset complete!")
+		)
+	add_child(dialog)
+	dialog.popup_centered()
+	
 func _on_exit_pressed() -> void:
 	print("Exit pressed")
 	get_tree().quit()

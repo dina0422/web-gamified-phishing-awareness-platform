@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://6wb2y7fwaobq" path="res://Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_1.png" id="1_2m0pd"]
 [ext_resource type="Texture2D" uid="uid://dwyt7fyut4rsu" path="res://Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_2_.png" id="2_3eogr"]
-[ext_resource type="PackedScene" uid="uid://bmaj15k31w0b7" path="res://player/atok.tscn" id="3_3eogr"]
-[ext_resource type="PackedScene" uid="uid://e20s754wnbp0" path="res://player/npc/npc_adam.tscn" id="4_y832c"]
+[ext_resource type="PackedScene" uid="uid://bmaj15k31w0b7" path="res://scenes/menu/player/atok.tscn" id="3_3eogr"]
+[ext_resource type="PackedScene" uid="uid://e20s754wnbp0" path="res://scenes/menu/player/npc/npc_adam.tscn" id="4_y832c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y832c"]
 texture = ExtResource("1_2m0pd")
