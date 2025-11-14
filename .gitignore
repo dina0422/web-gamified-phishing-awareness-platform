@@ -1,3 +1,5 @@
+scripts/firebase_manager.gd 
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia

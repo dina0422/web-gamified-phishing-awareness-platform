@@ -29,6 +29,10 @@ var language_button
 var restart_button
 var exit_button
 
+# Firebase initialization state
+var firebase_initializing: bool = false
+var firebase_ready: bool = false
+
 func _ready() -> void:
 	# Find the VBoxContainer
 	var vbox = $VBoxContainer
@@ -41,7 +45,7 @@ func _ready() -> void:
 		elif child is Label:
 			welcome_label = child
 	
-	# Assign buttons (assuming order: Start, Language, Exit)
+	# Assign buttons (assuming order: Start, Language, Restart, Exit)
 	if buttons.size() >= 4:
 		start_button = buttons[0]
 		language_button = buttons[1]
@@ -64,6 +68,30 @@ func _ready() -> void:
 	
 	# Initial UI update
 	update_ui_text()
+	
+	# Initialize Firebase in background - DON'T BLOCK UI!
+	_initialize_firebase_background()
+
+func _initialize_firebase_background() -> void:
+	"""Initialize Firebase without blocking the UI"""
+	if firebase_initializing or firebase_ready:
+		return
+	
+	firebase_initializing = true
+	print("🔥 Main Menu: Initializing Firebase in background...")
+	
+	var success = await Firebase.sign_in_anonymous()
+	
+	firebase_initializing = false
+	firebase_ready = success
+	
+	if success:
+		print("✅ Main Menu: Firebase ready")
+		# Update button text if display name is available
+		if start_button and Firebase.display_name != "":
+			print("👤 Main Menu: Welcome back, ", Firebase.display_name)
+	else:
+		print("⚠️ Main Menu: Firebase initialization failed (game will still work)")
 
 func get_text(key: String) -> String:
 	if current_language in translations and key in translations[current_language]:
@@ -115,25 +143,105 @@ func update_ui_text():
 			"zh":
 				language_button.text = "语言：中文"
 				
-const NAME_INPUT_SCENE := "res://scenes/menu/name_input.tscn"
-const ROLE_SELECTION_SCENE := "res://scenes/menu/role_selection.tscn" 
+const NAME_INPUT_SCENE := "res://gameplay/main/name_input.tscn"
+const ROLE_SELECTION_SCENE := "res://gameplay/main/role_selection.tscn" 
 
 func _on_start_pressed() -> void:
-	# 1) Anonymous sign-in (reuses session if already exists)
-	var ok = await Firebase.sign_in_anonymous()
-	if not ok:
-		push_error("Sign-in failed. Check API key / internet.")
-		return
-
-	# 2) If we already have a local display name, skip name input
-	var local = Firebase._load_profile_local()
+	print("🎮 Main Menu: Get Started button pressed!")
+	
+	# Disable button to prevent double-clicks
+	if start_button:
+		start_button.disabled = true
+	
+	# Check if Firebase is ready
+	if not firebase_ready and not firebase_initializing:
+		print("⏳ Main Menu: Firebase not initialized yet, initializing now...")
+		await _initialize_firebase_background()
+	elif firebase_initializing:
+		print("⏳ Main Menu: Waiting for Firebase initialization...")
+		# Wait for initialization to complete
+		while firebase_initializing:
+			await get_tree().process_frame
+	
+	# If Firebase failed to initialize, try one more time
+	if not firebase_ready:
+		print("🔄 Main Menu: Retrying Firebase sign-in...")
+		var success = await Firebase.sign_in_anonymous()
+		if not success:
+			# Show error dialog
+			_show_error_dialog(
+				"Connection Error",
+				"Failed to connect to Firebase. Please check your internet connection."
+			)
+			if start_button:
+				start_button.disabled = false
+			return
+	
+	# Now check if user has a display name
+	var has_display_name = false
+	
+	# Check Firebase display_name first
 	if Firebase.display_name != "":
-		get_tree().change_scene_to_file(ROLE_SELECTION_SCENE)
-	elif local.has("displayName") and str(local["displayName"]).strip_edges() != "":
-		Firebase.display_name = str(local["displayName"])
-		get_tree().change_scene_to_file(ROLE_SELECTION_SCENE)
+		has_display_name = true
+		print("✅ Main Menu: User has display name: ", Firebase.display_name)
 	else:
-		get_tree().change_scene_to_file(NAME_INPUT_SCENE)
+		# Check local profile file using public method
+		var profile_data = _check_local_profile()
+		if profile_data.has("displayName") and str(profile_data["displayName"]).strip_edges() != "":
+			Firebase.display_name = str(profile_data["displayName"])
+			has_display_name = true
+			print("✅ Main Menu: Loaded display name from local cache: ", Firebase.display_name)
+	
+	# Navigate to appropriate scene
+	if has_display_name:
+		print("➡️ Main Menu: Navigating to role selection...")
+		var err = get_tree().change_scene_to_file(ROLE_SELECTION_SCENE)
+		if err != OK:
+			push_error("❌ Failed to change to role selection scene! Error: %d" % err)
+			_show_error_dialog("Scene Error", "Failed to load role selection scene. Error code: %d" % err)
+			if start_button:
+				start_button.disabled = false
+	else:
+		print("➡️ Main Menu: Navigating to name input...")
+		print("Scene path: %s" % NAME_INPUT_SCENE)
+		var err = get_tree().change_scene_to_file(NAME_INPUT_SCENE)
+		print("Scene change result: %d (0 = OK)" % err)
+		if err != OK:
+			push_error("❌ Failed to change to name input scene! Error: %d" % err)
+			_show_error_dialog("Scene Error", "Failed to load name input scene. Error code: %d" % err)
+			if start_button:
+				start_button.disabled = false
+
+func _check_local_profile() -> Dictionary:
+	"""Safe wrapper to check local profile without accessing private method"""
+	const PROFILE_FILE := "user://profile.json"
+	
+	if not FileAccess.file_exists(PROFILE_FILE):
+		return {}
+	
+	var f := FileAccess.open(PROFILE_FILE, FileAccess.READ)
+	if not f:
+		return {}
+	
+	var j = JSON.parse_string(f.get_as_text())
+	f.close()
+	
+	return j if typeof(j) == TYPE_DICTIONARY else {}
+
+func _show_error_dialog(title: String, message: String) -> void:
+	"""Show an error dialog to the user"""
+	var dialog := AcceptDialog.new()
+	dialog.dialog_text = message
+	dialog.title = title
+	dialog.ok_button_text = "OK"
+	
+	add_child(dialog)
+	dialog.popup_centered()
+	
+	# Clean up after dialog is closed
+	dialog.confirmed.connect(func():
+		dialog.queue_free()
+	)
 		
 func _on_language_pressed() -> void:
 	print("Language button pressed!")
@@ -158,7 +266,11 @@ func _on_restart_pressed()-> void:
 		DirAccess.remove_absolute("user://profile.json")
 		Firebase.uid = ""	
 		Firebase.display_name = ""
+		firebase_ready = false
+		firebase_initializing = false
 		print("✅ Reset complete!")
+		# Reinitialize Firebase
+		_initialize_firebase_background()
 		)
 	add_child(dialog)
 	dialog.popup_centered()

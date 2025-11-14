@@ -1,0 +1,154 @@
+[gd_scene load_steps=6 format=3 uid="uid://ca1woy58ykad6"]
+
+[ext_resource type="Texture2D" uid="uid://bs4tihgae3pe0" path="res://assets/background/leaderboard.jpg" id="1_pjgth"]
+[ext_resource type="FontFile" uid="uid://dvliwf4sqt3hy" path="res://assets/fonts/Minecraft.ttf" id="2_th67y"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_y1kwj"]
+texture = ExtResource("1_pjgth")
+
+[sub_resource type="FontFile" id="FontFile_itswe"]
+cache/0/20/0/ascent = 0.0
+cache/0/20/0/descent = 0.0
+cache/0/20/0/underline_position = 0.0
+cache/0/20/0/underline_thickness = 0.0
+cache/0/20/0/scale = 1.0
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
+cache/0/21/0/ascent = 0.0
+cache/0/21/0/descent = 0.0
+cache/0/21/0/underline_position = 0.0
+cache/0/21/0/underline_thickness = 0.0
+cache/0/21/0/scale = 1.0
+cache/0/22/0/ascent = 0.0
+cache/0/22/0/descent = 0.0
+cache/0/22/0/underline_position = 0.0
+cache/0/22/0/underline_thickness = 0.0
+cache/0/22/0/scale = 1.0
+cache/0/23/0/ascent = 0.0
+cache/0/23/0/descent = 0.0
+cache/0/23/0/underline_position = 0.0
+cache/0/23/0/underline_thickness = 0.0
+cache/0/23/0/scale = 1.0
+cache/0/24/0/ascent = 0.0
+cache/0/24/0/descent = 0.0
+cache/0/24/0/underline_position = 0.0
+cache/0/24/0/underline_thickness = 0.0
+cache/0/24/0/scale = 1.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjgth"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 1, 0, 1)
+
+[node name="Leaderboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -81.0
+offset_right = 6.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_y1kwj")
+
+[node name="Label" type="Label" parent="."]
+auto_translate_mode = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -211.0
+offset_top = 75.0
+offset_right = 227.0
+offset_bottom = 127.0
+grow_horizontal = 2
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_constants/shadow_offset_x = 10
+theme_override_fonts/font = ExtResource("2_th67y")
+theme_override_font_sizes/font_size = 52
+text = "LEADERBOARD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Label"]
+layout_mode = 0
+offset_left = -74.0
+offset_top = 66.0
+offset_right = 506.0
+offset_bottom = 554.0
+
+[node name="GridContainer" type="GridContainer" parent="Label/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 3
+
+[node name="Label" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_constants/line_spacing = 3
+theme_override_fonts/font = SubResource("FontFile_itswe")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "Rank"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_fonts/font = SubResource("FontFile_itswe")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "Player"
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_fonts/font = SubResource("FontFile_itswe")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "Score"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "1"
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "Dina"
+
+[node name="Label6" type="Label" parent="Label/VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+theme_override_styles/normal = SubResource("StyleBoxFlat_pjgth")
+text = "250"
+horizontal_alignment = 1

@@ -1,0 +1,149 @@
+[gd_scene load_steps=4 format=3 uid="uid://whatsapp_phishing_001"]
+
+[ext_resource type="Script" path="res://whatsapp_phishing.gd" id="1_whatsapp"]
+[ext_resource type="Texture2D" uid="uid://dcl8pshxj12ae" path="res://PixelArt Phone.png" id="2_phone"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_message"]
+bg_color = Color(0.2, 0.8, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 8
+
+[node name="WhatsAppPhishing" type="CanvasLayer"]
+script = ExtResource("1_whatsapp")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PhoneFrame" type="Panel" parent="CenterContainer"]
+custom_minimum_size = Vector2(400, 700)
+layout_mode = 2
+
+[node name="PhoneSprite" type="Sprite2D" parent="CenterContainer/PhoneFrame"]
+z_index = -1
+position = Vector2(200, 350)
+scale = Vector2(3.5, 3.1)
+texture = ExtResource("2_phone")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PhoneFrame"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PhoneFrame/MarginContainer"]
+layout_mode = 2
+
+[node name="Header" type="Panel" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="BackButton" type="Button" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/Header/HBoxContainer"]
+layout_mode = 2
+text = "<"
+
+[node name="ContactName" type="Label" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/Header/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "MyEG Official"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MessagesContainer" type="VBoxContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15
+
+[node name="MessagePanel" type="PanelContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/ScrollContainer/MessagesContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="MessageLabel" type="RichTextLabel" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/ScrollContainer/MessagesContainer/MessagePanel"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[b]MyEG Official[/b]
+
+Salam, tuan/puan. Akaun MyEG anda telah dibekukan kerana aktiviti mencurigakan.
+
+Klik pautan ini untuk pengesahan:
+[color=blue][u]https://myeg-verify-my.com[/u][/color]
+
+Anda mempunyai 24 jam sahaja untuk mengelakkan penalti RM500."
+fit_content = true
+scroll_active = false
+
+[node name="QuestionPanel" type="Panel" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="QuestionLabel" type="Label" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "What should you do?"
+autowrap_mode = 3
+
+[node name="OptionA" type="Button" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+text = "A) Click the link immediately to avoid penalty"
+
+[node name="OptionB" type="Button" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+text = "B) Ignore the message - it's a phishing attempt"
+
+[node name="OptionC" type="Button" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+text = "C) Call MyEG's official helpline to verify"
+
+[node name="OptionD" type="Button" parent="CenterContainer/PhoneFrame/MarginContainer/VBoxContainer/QuestionPanel/MarginContainer2/VBoxContainer2"]
+layout_mode = 2
+text = "D) Forward this to family and friends"

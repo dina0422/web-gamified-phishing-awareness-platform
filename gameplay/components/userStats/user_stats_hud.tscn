@@ -1,0 +1,130 @@
+[gd_scene load_steps=4 format=3 uid="uid://crpamacrvjtku"]
+
+[ext_resource type="Script" uid="uid://de2m2wx8trflv" path="res://gameplay/components/userStats/user_stats_hud.gd" id="1_3hney"]
+[ext_resource type="FontFile" uid="uid://dvliwf4sqt3hy" path="res://assets/fonts/Minecraft.ttf" id="2_71qdx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.1, 0.1, 0.15, 0.85)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.5, 0.7, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="UserStatsHUD" type="CanvasLayer"]
+script = ExtResource("1_3hney")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.84900004
+anchor_top = -0.09
+anchor_right = 0.84900004
+anchor_bottom = -0.09
+offset_left = -50.048035
+offset_top = 82.32001
+offset_right = 155.37592
+offset_bottom = 181.32
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PlayerInfo" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="PlayerIcon" type="Label" parent="Panel/VBoxContainer/PlayerInfo"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_71qdx")
+theme_override_font_sizes/font_size = 18
+text = "👤"
+
+[node name="PlayerNameLabel" type="Label" parent="Panel/VBoxContainer/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_71qdx")
+theme_override_font_sizes/font_size = 18
+text = "Player:"
+vertical_alignment = 1
+
+[node name="PlayerName" type="Label" parent="Panel/VBoxContainer/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.4, 0.8, 1, 1)
+theme_override_fonts/font = ExtResource("2_71qdx")
+theme_override_font_sizes/font_size = 18
+text = "Loading..."
+vertical_alignment = 1
+
+[node name="ScoreInfo" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ScoreIcon" type="Label" parent="Panel/VBoxContainer/ScoreInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "⭐"
+
+[node name="ScoreLabel" type="Label" parent="Panel/VBoxContainer/ScoreInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Score:"
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="Panel/VBoxContainer/ScoreInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_font_sizes/font_size = 18
+text = "0"
+vertical_alignment = 1
+
+[node name="Separator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="RoleInfo" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RoleIcon" type="Label" parent="Panel/VBoxContainer/RoleInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🎯"
+
+[node name="RoleLabel" type="Label" parent="Panel/VBoxContainer/RoleInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Level:"
+vertical_alignment = 1
+
+[node name="Role" type="Label" parent="Panel/VBoxContainer/RoleInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7, 0.9, 0.7, 1)
+theme_override_font_sizes/font_size = 18
+text = "Beginner"
+vertical_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -81.0
+offset_top = 144.0
+offset_right = -31.0
+offset_bottom = 184.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_71qdx")
+theme_override_font_sizes/font_size = 20
+text = "⚙️"
+
+[connection signal="pressed" from="SettingsButton" to="." method="_on_settings_button_pressed"]
