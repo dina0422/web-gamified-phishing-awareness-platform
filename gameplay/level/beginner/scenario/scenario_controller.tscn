@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://hafth2rhl0fl"]
+
+[ext_resource type="Script" uid="uid://cef8cn22mtenr" path="res://gameplay/level/beginner/scenario/scenario_controller.gd" id="1_e6wg3"]
+[ext_resource type="Script" uid="uid://dc8sx0mvc0e6e" path="res://gameplay/level/beginner/scenario/beginner_scenario_01.gd" id="2_nxo20"]
+
+[node name="ScenarioController" type="Node"]
+script = ExtResource("1_e6wg3")
+
+[node name="beginner_scenario_01" type="Node" parent="."]
+script = ExtResource("2_nxo20")

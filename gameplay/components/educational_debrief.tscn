@@ -1,0 +1,182 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1cut13rvqd3k"]
+
+[ext_resource type="Script" uid="uid://c1iy6jwysjt21" path="res://gameplay/components/educational_debrief.gd" id="1_debrief"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.08, 0.08, 0.12, 0.98)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.3, 0.7, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_size = 10
+
+[node name="EducationalDebrief" type="CanvasLayer"]
+layer = 150
+script = ExtResource("1_debrief")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.85)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -318.0
+offset_right = 450.0
+offset_bottom = 315.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="Panel" type="Panel" parent="ScrollContainer"]
+custom_minimum_size = Vector2(900, 1000)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HeaderSection" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResultLabel" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/HeaderSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "✅ CORRECT!"
+horizontal_alignment = 1
+
+[node name="PointsLabel" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/HeaderSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 22
+text = "+30 points"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ExplanationSection" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ExplanationTitle" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ExplanationSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 16
+text = "📚 Explanation"
+
+[node name="ExplanationText" type="RichTextLabel" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ExplanationSection"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "Explanation will appear here..."
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="RedFlagsSection" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RedFlagsTitle" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/RedFlagsSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+text = "🚩 Red Flags Identified"
+
+[node name="RedFlagsList" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/RedFlagsSection"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HSeparator3" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LearningSection" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LearningTitle" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/LearningSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "✅ What You Should Know"
+
+[node name="LearningText" type="RichTextLabel" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/LearningSection"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 13
+bbcode_enabled = true
+text = "Key learning points..."
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator4" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScoreSection" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ScoreTitle" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ScoreSection"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+theme_override_font_sizes/font_size = 15
+text = "Your Progress"
+horizontal_alignment = 1
+
+[node name="CurrentScoreLabel" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ScoreSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Current Score: 30 / 100"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ScoreSection"]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+value = 30.0
+show_percentage = false
+
+[node name="ButtonContainer" type="HBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ContinueButton" type="Button" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Continue ➜"
+
+[connection signal="pressed" from="ScrollContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer/ContinueButton" to="." method="_on_continue_pressed"]

@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://whatsapp_phishing_001"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Script" path="res://whatsapp_phishing.gd" id="1_whatsapp"]
-[ext_resource type="Texture2D" uid="uid://dcl8pshxj12ae" path="res://PixelArt Phone.png" id="2_phone"]
+[ext_resource type="Script" uid="uid://cgushhtftcdma" path="res://gameplay/components/whatsapp_phishing.gd" id="1_whatsapp"]
+[ext_resource type="Texture2D" uid="uid://dcl8pshxj12ae" path="res://assets/PixelArt Phone.png" id="2_phone"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_message"]
 bg_color = Color(0.2, 0.8, 0.2, 1)

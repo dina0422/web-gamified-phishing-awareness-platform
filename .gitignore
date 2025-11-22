@@ -1,5 +1,17 @@
 scripts/firebase_manager.gd 
 
+# Firebase
+.firebase/
+firebase-debug.log
+*.cache
+
+# Godot export files
+public/*.pck
+public/*.wasm
+public/*.js
+public/*.html
+public/index.*
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
@@ -16,3 +28,24 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+._Spotlight-V100
+.Trashes
+Thumbs.db
+
+# IDE 
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+#temp files
+*.tmp
+*.bak

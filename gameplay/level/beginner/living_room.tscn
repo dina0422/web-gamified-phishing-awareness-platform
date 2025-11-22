@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cv8xl2grwmo2e"]
+[gd_scene load_steps=18 format=3 uid="uid://cv8xl2grwmo2e"]
 
 [ext_resource type="Texture2D" uid="uid://6wb2y7fwaobq" path="res://assets/Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_1.png" id="1_2m0pd"]
 [ext_resource type="Texture2D" uid="uid://dwyt7fyut4rsu" path="res://assets/Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_2_.png" id="2_3eogr"]
@@ -8,6 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://ssdkoqfcktmt" path="res://gameplay/components/dialogue_box.tscn" id="6_efjrm"]
 [ext_resource type="Script" uid="uid://7jds76od4vwf" path="res://gameplay/components/dialogue_box.gd" id="7_cigpc"]
 [ext_resource type="PackedScene" uid="uid://bph1je1mgvr1i" path="res://gameplay/components/scene_trigger.tscn" id="8_r1s7f"]
+[ext_resource type="PackedScene" uid="uid://hafth2rhl0fl" path="res://gameplay/level/beginner/scenario/scenario_controller.tscn" id="9_1m4wk"]
+[ext_resource type="PackedScene" uid="uid://dus46y1w3win3" path="res://gameplay/components/email_viewer.tscn" id="10_qewo2"]
+[ext_resource type="PackedScene" path="res://gameplay/components/educational_debrief.tscn" id="11_0uc5y"]
+[ext_resource type="PackedScene" uid="uid://clp48ihywfc7f" path="res://gameplay/components/decision_prompt.tscn" id="11_ajde1"]
+[ext_resource type="PackedScene" uid="uid://ce1ou7vwgmbj0" path="res://gameplay/components/quest_tracker.tscn" id="13_qewo2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y832c"]
 texture = ExtResource("1_2m0pd")
@@ -416,9 +421,10 @@ position = Vector2(513, 294)
 position = Vector2(458, 181)
 
 [node name="UserStatsHUD" parent="." instance=ExtResource("5_gv5vc")]
+layer = 200
 
 [node name="DialogueBox" parent="." instance=ExtResource("6_efjrm")]
-visible = false
+layer = 10
 script = ExtResource("7_cigpc")
 
 [node name="SceneTrigger" parent="." instance=ExtResource("8_r1s7f")]
@@ -428,5 +434,25 @@ connected_scene = "beginner/home_office"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger"]
 position = Vector2(68, 32.5)
 shape = SubResource("RectangleShape2D_1m4wk")
+
+[node name="ScenarioController" parent="." instance=ExtResource("9_1m4wk")]
+
+[node name="SimulationLayer" type="CanvasLayer" parent="."]
+layer = 50
+
+[node name="EmailViewer" parent="SimulationLayer" instance=ExtResource("10_qewo2")]
+
+[node name="DecisionLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="DecisionPrompt" parent="DecisionLayer" instance=ExtResource("11_ajde1")]
+
+[node name="DebriefLayer" type="CanvasLayer" parent="."]
+layer = 150
+
+[node name="EducationalDebrief" parent="DebriefLayer" instance=ExtResource("11_0uc5y")]
+
+[node name="QuestTracker" parent="." instance=ExtResource("13_qewo2")]
+layer = 5
 
 [connection signal="body_entered" from="SceneTrigger" to="SceneTrigger" method="_on_body_entered"]

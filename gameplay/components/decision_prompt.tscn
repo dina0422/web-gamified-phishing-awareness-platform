@@ -1,0 +1,128 @@
+[gd_scene load_steps=3 format=3 uid="uid://clp48ihywfc7f"]
+
+[ext_resource type="Script" uid="uid://xe2qoh2pwesv" path="res://gameplay/components/decision_prompt.gd" id="1_decision"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.08, 0.08, 0.12, 0.98)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.3, 0.6, 0.9, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 10
+
+[node name="DecisionPrompt" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_decision")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.75)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -326.0
+offset_right = 401.0
+offset_bottom = 319.0
+grow_horizontal = 2
+grow_vertical = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="Panel" type="Panel" parent="ScrollContainer"]
+custom_minimum_size = Vector2(780, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 2.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 18
+
+[node name="HeaderContainer" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleLabel" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 22
+text = "🤔 Decision Time"
+horizontal_alignment = 1
+
+[node name="QuestionLabel" type="RichTextLabel" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/normal_font_size = 16
+bbcode_enabled = true
+text = "What should you do about this situation?"
+fit_content = true
+scroll_active = false
+
+[node name="HSeparator" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="OptionsContainer" type="VBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="HSeparator2" type="HSeparator" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="BottomContainer" type="HBoxContainer" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HintButton" type="Button" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/BottomContainer"]
+custom_minimum_size = Vector2(120, 45)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "💡 Hint"
+
+[node name="Spacer" type="Control" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/BottomContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimerLabel" type="Label" parent="ScrollContainer/Panel/MarginContainer/VBoxContainer/BottomContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 18
+text = "⏱️ --:--"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="pressed" from="ScrollContainer/Panel/MarginContainer/VBoxContainer/BottomContainer/HintButton" to="." method="_on_hint_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

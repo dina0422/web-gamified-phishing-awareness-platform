@@ -98,3 +98,16 @@ parameters/idle/blend_position = Vector2(0, 0)
 libraries = {
 &"": SubResource("AnimationLibrary_qxri6")
 }
+
+[node name="name_display" type="Label" parent="."]
+offset_left = -11.0
+offset_top = -18.0
+offset_right = 29.0
+offset_bottom = 25.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 14
+text = "Adam
+"
+horizontal_alignment = 1
+vertical_alignment = 1
