@@ -1,0 +1,129 @@
+[gd_scene load_steps=5 format=3 uid="uid://duf2vmjfv1eq7"]
+
+[ext_resource type="Script" uid="uid://bl3i5m4nsgydq" path="res://gameplay/leaderboard.gd" id="1_fnfpr"]
+[ext_resource type="Texture2D" uid="uid://bs4tihgae3pe0" path="res://assets/background/leaderboard.jpg" id="2_bg"]
+[ext_resource type="FontFile" uid="uid://dvliwf4sqt3hy" path="res://assets/fonts/Minecraft.ttf" id="3_font"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg"]
+texture = ExtResource("2_bg")
+
+[node name="Leaderboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fnfpr")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_bg")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 140.0
+offset_bottom = 180.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_font")
+theme_override_font_sizes/font_size = 52
+text = "LEADERBOARD"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlsContainer#FilterLabel" type="Label" parent="."]
+layout_mode = 0
+text = "Filter by Role:"
+vertical_alignment = 1
+
+[node name="RoleFilterOptions" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 145.0
+offset_right = 650.0
+offset_bottom = 175.0
+
+[node name="ControlsContainer#SortLabel" type="Label" parent="."]
+layout_mode = 0
+text = "   Sort by:"
+vertical_alignment = 1
+
+[node name="SortOptions" type="OptionButton" parent="."]
+layout_mode = 0
+offset_left = 750.0
+offset_top = 145.0
+offset_right = 950.0
+offset_bottom = 175.0
+
+[node name="RefreshButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "ðŸ"
+
+[node name="CompletionPopup#VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="CompletionPopup_VBoxContainer#TitleLabel" type="Label" parent="."]
+layout_mode = 0
+theme_override_font_sizes/font_size = 36
+text = "ðŸŽ‰ Role Completed!"
+horizontal_alignment = 1
+
+[node name="CompletionPopup_VBoxContainer#Spacer1" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 20)
+anchors_preset = 0
+
+[node name="CompletionPopup_VBoxContainer#ScoreLabel" type="Label" parent="."]
+layout_mode = 0
+theme_override_font_sizes/font_size = 28
+text = "Final Score: 250"
+horizontal_alignment = 1
+
+[node name="CompletionPopup_VBoxContainer#BadgeLabel" type="Label" parent="."]
+layout_mode = 0
+theme_override_font_sizes/font_size = 24
+text = "Badge Earned: ðŸ¥‡ Gold"
+horizontal_alignment = 1
+
+[node name="CompletionPopup_VBoxContainer#Spacer2" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 20)
+anchors_preset = 0
+
+[node name="CompletionPopup_VBoxContainer#MessageLabel" type="Label" parent="."]
+layout_mode = 0
+theme_override_font_sizes/font_size = 18
+text = "See where you rank!"
+horizontal_alignment = 1
+
+[node name="CompletionPopup_VBoxContainer#Spacer3" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 20)
+anchors_preset = 0
+
+[node name="CompletionPopup_VBoxContainer#ContinueButton" type="Button" parent="."]
+layout_mode = 0
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "View Leaderboard"

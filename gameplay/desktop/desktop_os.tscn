@@ -1,0 +1,149 @@
+[gd_scene load_steps=3 format=3 uid="uid://behq6mt3duk1y"]
+
+[ext_resource type="Script" uid="uid://bmry0qgr85k6b" path="res://gameplay/desktop/desktop_os.gd" id="1_desktop"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_taskbar"]
+bg_color = Color(0.15, 0.15, 0.15, 0.95)
+
+[node name="DesktopOS" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_desktop")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.3, 0.4, 1)
+
+[node name="Wallpaper" type="TextureRect" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="WindowContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DesktopIcons" type="GridContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -500.0
+offset_right = 180.0
+offset_bottom = -80.0
+grow_vertical = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+
+[node name="Taskbar" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_taskbar")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Taskbar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="StartButton" type="Button" parent="Taskbar/HBoxContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+text = "🏠 Start"
+
+[node name="TaskbarApps" type="HBoxContainer" parent="Taskbar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Spacer" type="Control" parent="Taskbar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SystemTray" type="HBoxContainer" parent="Taskbar/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NotificationButton" type="Button" parent="Taskbar/HBoxContainer/SystemTray"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "🔔"
+
+[node name="TimeLabel" type="Label" parent="Taskbar/HBoxContainer/SystemTray"]
+layout_mode = 2
+text = "12:00 PM"
+vertical_alignment = 1
+
+[node name="NotificationPopup" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -350.0
+offset_top = 70.0
+offset_right = -20.0
+offset_bottom = 170.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="NotificationPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NotificationPopup/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="NotificationPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "System Notification"
+
+[node name="Message" type="Label" parent="NotificationPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "You have a new message!"
+autowrap_mode = 3
+
+[node name="CloseButton" type="Button" parent="NotificationPopup/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Dismiss"
+
+[connection signal="pressed" from="Taskbar/HBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="Taskbar/HBoxContainer/SystemTray/NotificationButton" to="." method="_on_notification_button_pressed"]
+[connection signal="pressed" from="NotificationPopup/MarginContainer/VBoxContainer/CloseButton" to="." method="_on_notification_close_pressed"]

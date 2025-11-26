@@ -2,6 +2,7 @@ extends CanvasLayer
 
 ## Displays email content for phishing scenarios
 
+signal action_taken(action_type: String, is_correct: bool)
 signal continue_pressed
 signal closed
 
@@ -36,11 +37,82 @@ func _ready():
 	close_button.pressed.connect(_on_close_pressed)
 	continue_button.pressed.connect(_on_continue_pressed)
 	
+	# Connect action buttons
+	var reply_btn = $ScrollContainer/EmailPanel/VBoxContainer/EmailContent/VBoxContainer/ActionButtons/ReplyButton
+	var forward_btn = $ScrollContainer/EmailPanel/VBoxContainer/EmailContent/VBoxContainer/ActionButtons/ForwardButton
+	var delete_btn = $ScrollContainer/EmailPanel/VBoxContainer/EmailContent/VBoxContainer/ActionButtons/DeleteButton
+	var report_btn = $ScrollContainer/EmailPanel/VBoxContainer/EmailContent/VBoxContainer/ActionButtons/ReportPhishingButton
+	
+	if reply_btn:
+		reply_btn.pressed.connect(func(): _on_action_pressed("reply"))
+	if forward_btn:
+		forward_btn.pressed.connect(func(): _on_action_pressed("forward"))
+	if delete_btn:
+		delete_btn.pressed.connect(func(): _on_action_pressed("delete"))
+	if report_btn:
+		report_btn.pressed.connect(func(): _on_action_pressed("report_phishing"))
+	
+	print("📧 Email Viewer initialized with all action buttons")
+	
 	# Style avatar
 	_setup_avatar_style()
 	
 	print("📧 Gmail-style Email Viewer initialized (Mobile: %s)" % is_mobile)
 
+func _on_action_pressed(action: String):
+	"""Handle email action button press"""
+	print("⚡ Email action: ", action)
+	
+	var is_phishing = email_data.get("is_phishing", false)
+	var is_correct = false
+	var points = 0
+	
+	match action:
+		"report_phishing":
+			# Correct action for phishing emails
+			if is_phishing:
+				is_correct = true
+				points = 100
+				print("✅ Correct! Reported phishing email")
+			else:
+				is_correct = false
+				points = -25
+				print("❌ Wrong! This was a legitimate email")
+		
+		"delete":
+			# Neutral action - better than interacting, but not as good as reporting
+			if is_phishing:
+				is_correct = true  # Acceptable response
+				points = 50  # Partial credit
+				print("⚠️ Acceptable. Deleted without engaging, but reporting is better")
+			else:
+				is_correct = true
+				points = 25
+				print("✅ Deleted email")
+		
+		"reply", "forward":
+			# Dangerous actions for phishing emails
+			if is_phishing:
+				is_correct = false
+				points = -50
+				print("❌ Dangerous! Never reply to or forward phishing emails")
+			else:
+				is_correct = true
+				points = 10
+				print("✅ Interacted with legitimate email")
+	
+	# Emit signal with action result
+	action_taken.emit(action, is_correct)
+	
+	# Show decision prompt with feedback
+	_show_decision_feedback(action, is_correct, points)
+
+func _show_decision_feedback(action: String, is_correct: bool, points: int):
+	"""Show feedback about the action taken"""
+	# This will connect to the DecisionPrompt system
+	# For now, just emit the continue signal
+	continue_pressed.emit()
+	
 func _detect_platform():
 	"""Detect if running on mobile/touch device"""
 	var os_name = OS.get_name()
@@ -53,6 +125,15 @@ func _setup_mobile_scrolling():
 	"""Configure ScrollContainer for optimal mobile/touch experience"""
 	if scroll_container:
 		scroll_container.follow_focus = true
+		scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		scroll_container.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+		
+		# Ensure body text can expand
+		if body_text:
+			body_text.fit_content = true
+			body_text.scroll_active = false  # Don't need internal scrolling
+			body_text.bbcode_enabled = true
+		
 		print("✅ Touch scrolling configured for email viewer")
 
 func _setup_avatar_style():
@@ -118,6 +199,20 @@ func display_email(data: Dictionary):
 	if scroll_container:
 		scroll_container.scroll_vertical = 0
 
+	# Set body with proper sizing
+	body_text.text = data.get("body", "")
+	
+	# Force layout update
+	await get_tree().process_frame
+	
+	# Reset scroll to top after content loads
+	if scroll_container:
+		scroll_container.scroll_vertical = 0
+		# Enable scrolling
+		scroll_container.set_process(true)
+	
+	print("📧 Email displayed with scrolling enabled")
+	
 func _parse_email_address(full_email: String) -> Dictionary:
 	"""Parse 'Name <email@domain.com>' format"""
 	var result = {"name": "", "email": ""}

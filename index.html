@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>PhishProofGodot</title>
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+body {
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
+}
+
+#canvas {
+	display: block;
+}
+
+#canvas:focus {
+	outline: none;
+}
+
+#status, #status-splash, #status-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
+
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
+}
+
+#status {
+	background-color: #242424;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+}
+
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
+}
+
+#status-splash.show-image--false {
+	display: none;
+}
+
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
+
+#status-progress, #status-notice {
+	display: none;
+}
+
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
+	z-index: 1;
+}
+		</style>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+	</head>
+	<body>
+		<canvas id="canvas">
+			Your browser does not support the canvas tag.
+		</canvas>
+
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
+
+		<div id="status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
+		</div>
+
+		<!-- 🔥 FIREBASE SDK - LOAD BEFORE EVERYTHING ELSE -->
+		<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+		<!-- 🔥 FIREBASE CONFIGURATION & BRIDGE -->
+		<script>
+console.log("🔥 Firebase: Loading SDK...");
+
+// Firebase Configuration
+const firebaseConfig = {
+	apiKey: "AIzaSyBSt6YW37WjQQY_Hg8oF4zCM5HE9jXYCRc",
+	authDomain: "phishproof-c6037.firebaseapp.com",
+	projectId: "phishproof-c6037",
+	storageBucket: "phishproof-c6037.firebasestorage.app",
+	messagingSenderId: "649990308430",
+	appId: "1:649990308430:web:8a4e7f5c9b2d1e6f8a9b0c"
+};
+
+// Initialize Firebase
+let app, auth, db;
+try {
+	app = firebase.initializeApp(firebaseConfig);
+	auth = firebase.auth();
+	db = firebase.firestore();
+	console.log("✅ Firebase: SDK initialized successfully");
+} catch (error) {
+	console.error("❌ Firebase: Initialization failed:", error);
+}
+
+// Global bridge object for Godot
+window.GodotFirebaseAuth = {
+	currentUser: null,
+	uid: "",
+	idToken: "",
+	ready: false,
+	_lastDisplayName: ""
+};
+
+// 🔥 Start anonymous sign-in immediately
+console.log("🔥 Firebase: Starting anonymous sign-in...");
+
+auth.signInAnonymously()
+	.then((userCredential) => {
+		window.GodotFirebaseAuth.currentUser = userCredential.user;
+		window.GodotFirebaseAuth.uid = userCredential.user.uid;
+		console.log("✅ Firebase: Anonymous user created:", window.GodotFirebaseAuth.uid);
+		
+		// Get ID token
+		return userCredential.user.getIdToken();
+	})
+	.then((token) => {
+		window.GodotFirebaseAuth.idToken = token;
+		window.GodotFirebaseAuth.ready = true;
+		console.log("✅ Firebase: ID token obtained");
+		console.log("✅ Firebase: Ready for Godot!");
+	})
+	.catch((error) => {
+		console.error("❌ Firebase: Sign-in error:", error.code, error.message);
+		window.GodotFirebaseAuth.ready = false;
+	});
+
+// Token refresh listener
+auth.onIdTokenChanged((user) => {
+	if (user) {
+		user.getIdToken().then((token) => {
+			window.GodotFirebaseAuth.idToken = token;
+			console.log("🔄 Firebase: Token refreshed");
+		});
+	}
+});
+
+// 📞 GODOT BRIDGE FUNCTIONS
+window.GodotFirebaseAuth.getUid = function() {
+	return window.GodotFirebaseAuth.uid;
+};
+
+window.GodotFirebaseAuth.getIdToken = function() {
+	return window.GodotFirebaseAuth.idToken;
+};
+
+window.GodotFirebaseAuth.isReady = function() {
+	return window.GodotFirebaseAuth.ready;
+};
+
+// 💾 Save display name
+window.GodotFirebaseAuth.saveDisplayName = function(uid, displayName) {
+	console.log("💾 Firebase JS: Saving display name:", displayName);
+	
+	return db.collection('users').doc(uid).set({
+		displayName: displayName,
+		createdAt: firebase.firestore.FieldValue.serverTimestamp()
+	}, { merge: true })
+	.then(() => {
+		console.log("✅ Firebase JS: Display name saved successfully");
+		window.GodotFirebaseAuth._lastDisplayName = displayName;
+		return true;
+	})
+	.catch((error) => {
+		console.error("❌ Firebase JS: Save display name failed:", error);
+		return false;
+	});
+};
+
+// 📖 Get display name
+window.GodotFirebaseAuth.getDisplayName = function(uid) {
+	console.log("📖 Firebase JS: Getting display name for:", uid);
+	
+	return db.collection('users').doc(uid).get()
+		.then((doc) => {
+			if (doc.exists && doc.data().displayName) {
+				const name = doc.data().displayName;
+				console.log("✅ Firebase JS: Display name found:", name);
+				window.GodotFirebaseAuth._lastDisplayName = name;
+				return name;
+			}
+			console.log("ℹ️ Firebase JS: No display name found");
+			return "";
+		})
+		.catch((error) => {
+			console.error("❌ Firebase JS: Get display name failed:", error);
+			return "";
+		});
+};
+
+// 💾 Save progress
+window.GodotFirebaseAuth.saveProgress = function(uid, role, score, completed, displayName) {
+	console.log("💾 Firebase JS: Saving progress -", role, score);
+	
+	const docId = uid + "_" + role;
+	
+	return db.collection('progress').doc(docId).set({
+		displayName: displayName,
+		role: role,
+		score: parseInt(score),
+		completed: completed === true || completed === "true",
+		lastPlayed: firebase.firestore.FieldValue.serverTimestamp()
+	}, { merge: true })
+	.then(() => {
+		console.log("✅ Firebase JS: Progress saved successfully");
+		return true;
+	})
+	.catch((error) => {
+		console.error("❌ Firebase JS: Save progress failed:", error);
+		return false;
+	});
+};
+
+// 🏆 Get leaderboard
+window.GodotFirebaseAuth.getLeaderboard = function(role, limit = 10) {
+	console.log("🏆 Firebase JS: Getting leaderboard for:", role);
+	
+	return db.collection('progress')
+		.where('role', '==', role)
+		.orderBy('score', 'desc')
+		.limit(limit)
+		.get()
+		.then((querySnapshot) => {
+			const results = [];
+			querySnapshot.forEach((doc) => {
+				const data = doc.data();
+				results.push({
+					displayName: data.displayName || "Anonymous",
+					score: data.score || 0,
+					role: data.role || role
+				});
+			});
+			console.log("✅ Firebase JS: Leaderboard loaded -", results.length, "entries");
+			return JSON.stringify(results);
+		})
+		.catch((error) => {
+			console.error("❌ Firebase JS: Get leaderboard failed:", error);
+			return JSON.stringify([]);
+		});
+};
+
+console.log("✅ Firebase: Bridge functions registered");
+console.log("📦 Available functions:", Object.keys(window.GodotFirebaseAuth).filter(k => typeof window.GodotFirebaseAuth[k] === 'function'));
+		</script>
+
+		<!-- GODOT ENGINE -->
+		<script src="index.js"></script>
+		<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":109392968,"index.wasm":36145869},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_THREADS_ENABLED = false;
+const engine = new Engine(GODOT_CONFIG);
+
+(function () {
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
+
+	let initializing = true;
+	let statusMode = '';
+
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
+
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
+
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occurred.');
+		}
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
+
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+			let serviceWorkerRegistrationPromise;
+			try {
+				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
+			} catch (err) {
+				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
+			}
+			// There's a chance that installing the service worker would fix the issue
+			Promise.race([
+				serviceWorkerRegistrationPromise.then((registration) => {
+					if (registration != null) {
+						return Promise.reject(new Error('Service worker already exists.'));
+					}
+					return registration;
+				}).then(() => engine.installServiceWorker()),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
+			]).then(() => {
+				// Reload if there was no error.
+				window.location.reload();
+			}).catch((err) => {
+				console.error('Error while registering service worker:', err);
+			});
+		} else {
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
+		}
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
+</html>

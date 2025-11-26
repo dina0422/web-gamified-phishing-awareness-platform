@@ -319,16 +319,14 @@ func hide_prompt():
 	visible = false
 
 func _input(event):
-	"""Handle keyboard shortcuts (desktop) - Mobile uses buttons"""
 	if not visible or not is_active:
 		return
 	
-	# Number keys for quick selection (desktop only)
 	if event is InputEventKey and event.pressed:
 		var key = event.keycode
-		
-		# Keys 1-9 for options A-I
-		if key >= KEY_1 and key <= KEY_9:
+	
+	# Keys 1-9 for options A-I
+		if key >= KEY_1 and key <= KEY_9:  # ✅ key is accessible now!
 			var option_index = key - KEY_1
 			if option_index < options.size():
 				_on_option_pressed(option_index)

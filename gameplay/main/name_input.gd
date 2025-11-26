@@ -1,6 +1,6 @@
 extends Control
 
-const ROLE_SELECTION_SCENE := "res://gameplay/main/role_selection.gd"
+const ROLE_SELECTION_SCENE := "res://gameplay/main/role_selection.tscn"
 const MAIN_MENU_SCENE := "res://main_menu.tscn"
 
 func _ready() -> void:

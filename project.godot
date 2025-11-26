@@ -16,10 +16,13 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]
 
+ScenarioManager="*res://scripts/scenario_manager.gd"
 Firebase="*res://scripts/firebase_manager.gd"
+ScenarioCompletion="*res://scenario_completion_helper.gd"
 
 [display]
 
+window/size/mode=3
 window/size/initial_position_type=0
 window/size/window_width_override=1280
 window/size/window_height_override=720

@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgwbh3svoxxv"]
+
+[ext_resource type="Script" uid="uid://c56u8wybeaile" path="res://gameplay/desktop/window.gd" id="1_window"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_window"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.3, 0.3, 1)
+
+[node name="Window" type="Panel"]
+custom_minimum_size = Vector2(600, 400)
+offset_right = 744.0
+offset_bottom = 504.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_window")
+script = ExtResource("1_window")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TitleBar" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/TitleBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="MarginLeft" type="Control" parent="VBoxContainer/TitleBar/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Icon" type="Label" parent="VBoxContainer/TitleBar/HBoxContainer"]
+layout_mode = 2
+text = "📄"
+
+[node name="Title" type="Label" parent="VBoxContainer/TitleBar/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Window Title"
+vertical_alignment = 1
+
+[node name="MinimizeButton" type="Button" parent="VBoxContainer/TitleBar/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "_"
+
+[node name="MaximizeButton" type="Button" parent="VBoxContainer/TitleBar/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "□"
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/TitleBar/HBoxContainer"]
+custom_minimum_size = Vector2(35, 0)
+layout_mode = 2
+text = "✕"
+
+[node name="MarginRight" type="Control" parent="VBoxContainer/TitleBar/HBoxContainer"]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+
+[node name="Content" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[connection signal="gui_input" from="VBoxContainer/TitleBar" to="." method="_on_title_bar_gui_input"]
+[connection signal="pressed" from="VBoxContainer/TitleBar/HBoxContainer/MinimizeButton" to="." method="_on_minimize_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TitleBar/HBoxContainer/MaximizeButton" to="." method="_on_maximize_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/TitleBar/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

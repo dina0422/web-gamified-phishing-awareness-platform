@@ -15,6 +15,11 @@ var player: CharacterBody2D = null
 # Score tracking
 var current_score: int = 0
 
+# Scenario tracking
+var completed_scenarios: Array = []  # Track which scenarios are done
+var total_scenarios: int = 1  # Update this based on how many scenarios in the scene
+var current_scenario_id: String = "email_phishing_01"  # Unique ID for this scenario
+
 # Scenario data for beginner level
 var email_data = {
 	"from": "noreply@winnerprize.com",
@@ -193,7 +198,7 @@ func _on_email_continue():
 			0.0,    # No time limit for beginner
 			false   # ⭐ HIDE POINT VALUES FOR BEGINNER MODE
 		)
-		print("❓ ScenarioController: Decision prompt shown (beginner mode - points hidden)")
+		print("✔ ScenarioController: Decision prompt shown (beginner mode - points hidden)")
 	else:
 		push_error("❌ ScenarioController: Cannot show decision prompt!")
 
@@ -214,6 +219,17 @@ func _on_decision_made(option_index: int, option_text: String, points: int):
 	
 	# Check if correct
 	var is_correct = (option_index == correct_answer_index)
+	
+	# ✅ Notify ScenarioCompletion system
+	if is_correct:
+		ScenarioCompletion.notify_correct_answer(points)
+		ScenarioCompletion.complete_scenario(current_scenario_id, points)
+	else:
+		ScenarioCompletion.notify_wrong_answer(abs(points))  # Use absolute value for penalty
+	
+	# Track this scenario as completed
+	if not completed_scenarios.has(current_scenario_id):
+		completed_scenarios.append(current_scenario_id)
 	
 	# Update quest
 	if quest_tracker and quest_tracker.has_method("update_objective"):
@@ -257,9 +273,30 @@ func _on_debrief_continue():
 	"""Called when player finishes reading debrief"""
 	print("✅ ScenarioController: Scenario complete!")
 	
-	# Complete quest
-	if quest_tracker and quest_tracker.has_method("complete_quest"):
-		quest_tracker.complete_quest()
+	# ✅ FIX: Notify quest tracker with correct method
+	if quest_tracker:
+		# Get current scene filename
+		var scene_name = get_tree().current_scene.scene_file_path.get_file()
+		print("📋 Notifying quest tracker for scene: ", scene_name)
+		
+		# Call the correct method: complete_scene() not complete_quest()
+		if quest_tracker.has_method("complete_scene"):
+			quest_tracker.complete_scene(scene_name)
+		elif quest_tracker.has_method("mark_task_complete"):
+			# Alternative: use task ID directly
+			var task_id = scene_name.replace(".tscn", "_complete")
+			quest_tracker.mark_task_complete(task_id)
+	
+	# ✅ NEW: Show completion dialogue
+	var dialogue_box = get_tree().current_scene.find_child("DialogueBox", true, false)
+	if dialogue_box and dialogue_box.has_method("show_dialogue"):
+		dialogue_box.show_dialogue("System", [
+			"🎉 Excellent work!",
+			"You've completed this phishing awareness task.",
+			"Check your quest tracker to see your progress!"
+		])
+		# Wait for dialogue to finish
+		await get_tree().create_timer(3.0).timeout
 	
 	# Hide debrief
 	if educational_debrief and educational_debrief.has_method("hide_debrief"):
@@ -295,3 +332,11 @@ func complete_current_quest():
 	"""Helper method to complete quest"""
 	if quest_tracker and quest_tracker.has_method("complete_quest"):
 		quest_tracker.complete_quest()
+
+# ========================================
+# SCENARIO COMPLETION TRACKING
+# ========================================
+
+func are_all_scenarios_complete() -> bool:
+	"""Check if all scenarios in this scene are completed"""
+	return completed_scenarios.size() >= total_scenarios

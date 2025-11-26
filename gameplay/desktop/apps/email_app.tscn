@@ -1,0 +1,299 @@
+[gd_scene load_steps=2 format=3 uid="uid://bk0wdlljdnr74"]
+
+[ext_resource type="Script" uid="uid://e57uefbh2jhm" path="res://gameplay/desktop/apps/email_app.gd" id="1"]
+
+[node name="EmailApp" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.95, 0.95, 0.95, 1)
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+split_offset = 100
+dragger_visibility = 1
+
+[node name="Sidebar" type="PanelContainer" parent="HSplitContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_stretch_ratio = 0.0
+
+[node name="SidebarBg" type="ColorRect" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+color = Color(0.98, 0.98, 0.98, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/Sidebar"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/Sidebar/MarginContainer"]
+layout_mode = 2
+
+[node name="ComposeButton" type="Button" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_colors/font_hover_color = Color(0.1, 0.1, 0.1, 1)
+theme_override_font_sizes/font_size = 14
+text = "✉ Compose"
+
+[node name="Space1" type="Control" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="InboxButton" type="Button" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "📥 Inbox (3)"
+flat = true
+alignment = 0
+
+[node name="SentButton" type="Button" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+text = "📤 Sent"
+flat = true
+alignment = 0
+
+[node name="SpamButton" type="Button" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+text = "🚫 Spam"
+flat = true
+alignment = 0
+
+[node name="TrashButton" type="Button" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+text = "🗑 Trash"
+flat = true
+alignment = 0
+
+[node name="Spacer" type="Control" parent="HSplitContainer/Sidebar/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MainArea" type="VBoxContainer" parent="HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="EmailList" type="PanelContainer" parent="HSplitContainer/MainArea"]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmailListBg" type="ColorRect" parent="HSplitContainer/MainArea/EmailList"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HSplitContainer/MainArea/EmailList"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailList/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderLabel" type="Label" parent="HSplitContainer/MainArea/EmailList/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 20
+text = "Primary"
+
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/MainArea/EmailList/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainArea/EmailList/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="EmailListContainer" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailList/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="EmailViewer" type="PanelContainer" parent="HSplitContainer/MainArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="EmailViewerBg" type="ColorRect" parent="HSplitContainer/MainArea/EmailViewer"]
+layout_mode = 2
+
+[node name="EmailContent" type="MarginContainer" parent="HSplitContainer/MainArea/EmailViewer"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="EmailHeader" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SubjectLabel" type="Label" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 22
+text = "Subject: "
+autowrap_mode = 3
+
+[node name="MetaContainer" type="HBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SenderIcon" type="ColorRect" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader/MetaContainer"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+color = Color(0.26, 0.52, 0.96, 1)
+
+[node name="IconLabel" type="Label" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader/MetaContainer/SenderIcon"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "📧"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MetaInfo" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader/MetaContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="FromLabel" type="Label" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader/MetaContainer/MetaInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 14
+text = "From: sender@example.com"
+
+[node name="DateLabel" type="Label" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/EmailHeader/MetaContainer/MetaInfo"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 13
+text = "Date: Today, 10:00 AM"
+
+[node name="HSeparator" type="HSeparator" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmailBody" type="RichTextLabel" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.2, 0.2, 0.2, 1)
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+text = "[center][color=#5F6368][b]Inbox[/b][/color]
+
+[color=#5F6368]Select an email to read it[/color][/center]"
+fit_content = true
+
+[node name="HSeparator2" type="HSeparator" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer"]
+layout_mode = 2
+
+[node name="ActionButtons" type="HBoxContainer" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ReplyButton" type="Button" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "↩ Reply"
+flat = true
+
+[node name="ForwardButton" type="Button" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "➜ Forward"
+flat = true
+
+[node name="DeleteButton" type="Button" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "🗑 Delete"
+flat = true
+
+[node name="Spacer" type="Control" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReportPhishingButton" type="Button" parent="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons"]
+custom_minimum_size = Vector2(160, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.35, 0.13, 1)
+theme_override_font_sizes/font_size = 14
+text = "🚨 Report Phishing"
+
+[connection signal="pressed" from="HSplitContainer/Sidebar/MarginContainer/VBoxContainer/InboxButton" to="." method="_on_inbox_pressed"]
+[connection signal="pressed" from="HSplitContainer/MainArea/EmailViewer/EmailContent/VBoxContainer/ActionButtons/ReportPhishingButton" to="." method="_on_report_phishing_pressed"]

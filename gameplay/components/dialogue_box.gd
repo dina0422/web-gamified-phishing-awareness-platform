@@ -12,11 +12,19 @@ var dialogue_queue: Array = []
 var current_dialogue_index: int = 0
 var is_active: bool = false
 
+# ✅ NEW: Reference to menu buttons
+var menu_buttons: CanvasLayer = null
+
 func _ready():
 	hide_dialogue()
 	continue_button.pressed.connect(_on_continue_pressed)
 	# Update button text to show the correct key
 	continue_button.text = "Continue (Enter)"
+	
+	# ✅ NEW: Find menu buttons reference
+	menu_buttons = get_tree().current_scene.find_child("GameMenuButtons", true, false)
+	if menu_buttons:
+		print("✅ DialogueBox: Found menu buttons reference")
 
 func _input(event):
 	# Changed from "interact" to "ui_accept" (Enter/Space)
@@ -28,6 +36,12 @@ func show_dialogue(npc_name: String, dialogues: Array):
 	current_dialogue_index = 0
 	npc_name_label.text = npc_name
 	is_active = true
+	
+	# ✅ NEW: Hide menu buttons during dialogue
+	if menu_buttons:
+		menu_buttons.visible = false
+		print("🔒 DialogueBox: Menu buttons hidden")
+	
 	panel.show()
 	_display_current_dialogue()
 
@@ -49,6 +63,12 @@ func _on_continue_pressed():
 
 func finish_dialogue():
 	hide_dialogue()
+	
+	# ✅ NEW: Show menu buttons after dialogue
+	if menu_buttons:
+		menu_buttons.visible = true
+		print("🔓 DialogueBox: Menu buttons restored")
+	
 	dialogue_finished.emit()
 	
 	# After dialogue, trigger the phishing simulation
