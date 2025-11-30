@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://duf2vmjfv1eq7"]
+[gd_scene load_steps=5 format=3 uid="uid://xfoyfxye2luj"]
 
 [ext_resource type="Script" uid="uid://bl3i5m4nsgydq" path="res://gameplay/leaderboard.gd" id="1_fnfpr"]
 [ext_resource type="Texture2D" uid="uid://bs4tihgae3pe0" path="res://assets/background/leaderboard.jpg" id="2_bg"]
@@ -7,7 +7,7 @@
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bg"]
 texture = ExtResource("2_bg")
 
-[node name="Leaderboard" type="Control"]
+[node name="leaderboard" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,8 +29,8 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_bg")
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_top = 140.0
-offset_bottom = 180.0
+offset_top = 50.0
+offset_bottom = 120.0
 grow_horizontal = 2
 theme_override_fonts/font = ExtResource("3_font")
 theme_override_font_sizes/font_size = 52
@@ -38,46 +38,124 @@ text = "LEADERBOARD"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ControlsContainer#FilterLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="ControlsContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 130.0
+offset_bottom = 170.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="FilterLabel" type="Label" parent="ControlsContainer"]
+layout_mode = 2
 text = "Filter by Role:"
 vertical_alignment = 1
 
-[node name="RoleFilterOptions" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 450.0
-offset_top = 145.0
-offset_right = 650.0
-offset_bottom = 175.0
+[node name="Spacer1" type="Control" parent="ControlsContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="ControlsContainer#SortLabel" type="Label" parent="."]
-layout_mode = 0
-text = "   Sort by:"
+[node name="RoleFilterOptions" type="OptionButton" parent="ControlsContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="ControlsContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="SortLabel" type="Label" parent="ControlsContainer"]
+layout_mode = 2
+text = "Sort by:"
 vertical_alignment = 1
 
-[node name="SortOptions" type="OptionButton" parent="."]
-layout_mode = 0
-offset_left = 750.0
-offset_top = 145.0
-offset_right = 950.0
-offset_bottom = 175.0
+[node name="Spacer3" type="Control" parent="ControlsContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
 
-[node name="RefreshButton" type="Button" parent="."]
+[node name="SortOptions" type="OptionButton" parent="ControlsContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="Spacer4" type="Control" parent="ControlsContainer"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 200.0
+offset_bottom = 800.0
 grow_horizontal = 2
-grow_vertical = 2
-text = "ðŸ"
+alignment = 1
 
-[node name="CompletionPopup#VBoxContainer" type="VBoxContainer" parent="."]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="HeaderRank" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Rank"
+horizontal_alignment = 1
+
+[node name="HeaderPlayer" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Player"
+horizontal_alignment = 1
+
+[node name="HeaderScore" type="Label" parent="VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Score"
+horizontal_alignment = 1
+
+[node name="BackButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -100.0
+offset_right = 250.0
+offset_bottom = -50.0
+grow_vertical = 0
+text = "← Main Menu"
+
+[node name="RestartButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -100.0
+offset_right = -50.0
+offset_bottom = -50.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "🔄 Restart Role"
+
+[node name="PlayerRankPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -180.0
+offset_right = 300.0
+offset_bottom = -130.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlayerRankPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,44 +164,103 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="CompletionPopup_VBoxContainer#TitleLabel" type="Label" parent="."]
-layout_mode = 0
-theme_override_font_sizes/font_size = 36
-text = "ðŸŽ‰ Role Completed!"
+[node name="RankLabel" type="Label" parent="PlayerRankPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "#1"
 horizontal_alignment = 1
 
-[node name="CompletionPopup_VBoxContainer#Spacer1" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 20)
-anchors_preset = 0
+[node name="Spacer1" type="Control" parent="PlayerRankPanel/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
 
-[node name="CompletionPopup_VBoxContainer#ScoreLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="PlayerNameLabel" type="Label" parent="PlayerRankPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "Player Name"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="PlayerRankPanel/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="PlayerScoreLabel" type="Label" parent="PlayerRankPanel/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+horizontal_alignment = 1
+
+[node name="Spacer3" type="Control" parent="PlayerRankPanel/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="BadgeIcon" type="TextureRect" parent="PlayerRankPanel/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[node name="CompletionPopup" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CompletionPopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CompletionPopup/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "🎉 Role Completed!"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="CompletionPopup/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="CompletionPopup/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "Final Score: 250"
 horizontal_alignment = 1
 
-[node name="CompletionPopup_VBoxContainer#BadgeLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="BadgeLabel" type="Label" parent="CompletionPopup/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "Badge Earned: ðŸ¥‡ Gold"
+text = "Badge Earned: 🥇 Gold"
 horizontal_alignment = 1
 
-[node name="CompletionPopup_VBoxContainer#Spacer2" type="Control" parent="."]
+[node name="Spacer2" type="Control" parent="CompletionPopup/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
-anchors_preset = 0
+layout_mode = 2
 
-[node name="CompletionPopup_VBoxContainer#MessageLabel" type="Label" parent="."]
-layout_mode = 0
+[node name="MessageLabel" type="Label" parent="CompletionPopup/VBoxContainer"]
+layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "See where you rank!"
 horizontal_alignment = 1
 
-[node name="CompletionPopup_VBoxContainer#Spacer3" type="Control" parent="."]
+[node name="Spacer3" type="Control" parent="CompletionPopup/VBoxContainer"]
 custom_minimum_size = Vector2(0, 20)
-anchors_preset = 0
+layout_mode = 2
 
-[node name="CompletionPopup_VBoxContainer#ContinueButton" type="Button" parent="."]
-layout_mode = 0
+[node name="ContinueButton" type="Button" parent="CompletionPopup/VBoxContainer"]
+layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "View Leaderboard"

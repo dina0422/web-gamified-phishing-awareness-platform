@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cv8xl2grwmo2e"]
+[gd_scene load_steps=18 format=3 uid="uid://cv8xl2grwmo2e"]
 
 [ext_resource type="Texture2D" uid="uid://6wb2y7fwaobq" path="res://assets/Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_1.png" id="1_2m0pd"]
 [ext_resource type="Texture2D" uid="uid://dwyt7fyut4rsu" path="res://assets/Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_2_.png" id="2_3eogr"]
@@ -12,8 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://dus46y1w3win3" path="res://gameplay/components/email_viewer.tscn" id="10_qewo2"]
 [ext_resource type="PackedScene" uid="uid://c1cut13rvqd3k" path="res://gameplay/components/educational_debrief.tscn" id="11_0uc5y"]
 [ext_resource type="PackedScene" uid="uid://clp48ihywfc7f" path="res://gameplay/components/decision_prompt.tscn" id="11_ajde1"]
-[ext_resource type="PackedScene" path="res://gameplay/components/quest_tracker.tscn" id="13_qewo2"]
-[ext_resource type="PackedScene" path="res://game_menu_buttons.tscn" id="14_ajde1"]
+[ext_resource type="PackedScene" uid="uid://dedrvueashcev" path="res://game_menu_buttons.tscn" id="14_ajde1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y832c"]
 texture = ExtResource("1_2m0pd")
@@ -433,7 +432,7 @@ position = Vector2(69, 155)
 connected_scene = "beginner/home_office"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneTrigger"]
-position = Vector2(68, 32.5)
+position = Vector2(83, 76)
 shape = SubResource("RectangleShape2D_1m4wk")
 
 [node name="ScenarioController" parent="." instance=ExtResource("9_1m4wk")]
@@ -458,8 +457,6 @@ visible = false
 
 [node name="EducationalDebrief" parent="DebriefLayer" instance=ExtResource("11_0uc5y")]
 visible = false
-
-[node name="QuestTracker" parent="." instance=ExtResource("13_qewo2")]
 
 [node name="GameMenuButtons" parent="." instance=ExtResource("14_ajde1")]
 

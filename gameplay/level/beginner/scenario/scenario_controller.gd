@@ -24,7 +24,7 @@ var current_scenario_id: String = "email_phishing_01"  # Unique ID for this scen
 var email_data = {
 	"from": "noreply@winnerprize.com",
 	"to": "you@email.com",
-	"subject": "🎉 CONGRATULATIONS! You Won RM10,000!!!",
+	"subject": "Ã°Å¸Å½â€° CONGRATULATIONS! You Won RM10,000!!!",
 	"body": """Dear Lucky Winner,
 
 CONGRATULATIONS! You have been selected as our GRAND PRIZE WINNER!
@@ -75,15 +75,15 @@ var red_flags = [
 
 var learning_points = """**Key Takeaways:**
 
-• Always verify sender email addresses from official sources
-• Be extremely suspicious of 'too good to be true' prize notifications
-• Never click shortened URLs from unknown senders
-• Legitimate companies won't create artificial urgency
-• When in doubt, contact the company directly through their official website
-• Delete suspicious emails and report them to IT security"""
+Ã¢â‚¬Â¢ Always verify sender email addresses from official sources
+Ã¢â‚¬Â¢ Be extremely suspicious of 'too good to be true' prize notifications
+Ã¢â‚¬Â¢ Never click shortened URLs from unknown senders
+Ã¢â‚¬Â¢ Legitimate companies won't create artificial urgency
+Ã¢â‚¬Â¢ When in doubt, contact the company directly through their official website
+Ã¢â‚¬Â¢ Delete suspicious emails and report them to IT security"""
 
 func _ready():
-	print("✅ ScenarioController: Ready")
+	print("Ã¢Å“â€¦ ScenarioController: Ready")
 	_find_components()
 	_connect_signals()
 
@@ -94,56 +94,56 @@ func _find_components():
 	# Find EmailViewer
 	email_viewer = scene_root.get_node_or_null("SimulationLayer/EmailViewer")
 	if email_viewer:
-		print("✅ ScenarioController: Found EmailViewer")
+		print("Ã¢Å“â€¦ ScenarioController: Found EmailViewer")
 	else:
-		push_error("❌ ScenarioController: EmailViewer not found!")
+		push_error("Ã¢ÂÅ’ ScenarioController: EmailViewer not found!")
 	
 	# Find DecisionPrompt
 	decision_prompt = scene_root.get_node_or_null("DecisionLayer/DecisionPrompt")
 	if decision_prompt:
-		print("✅ ScenarioController: Found DecisionPrompt")
+		print("Ã¢Å“â€¦ ScenarioController: Found DecisionPrompt")
 	else:
-		push_error("❌ ScenarioController: DecisionPrompt not found!")
+		push_error("Ã¢ÂÅ’ ScenarioController: DecisionPrompt not found!")
 	
 	# Find EducationalDebrief
 	educational_debrief = scene_root.get_node_or_null("DebriefLayer/EducationalDebrief")
 	if educational_debrief:
-		print("✅ ScenarioController: Found EducationalDebrief")
+		print("Ã¢Å“â€¦ ScenarioController: Found EducationalDebrief")
 	else:
-		push_error("❌ ScenarioController: EducationalDebrief not found!")
+		push_error("Ã¢ÂÅ’ ScenarioController: EducationalDebrief not found!")
 	
 	# Find QuestTracker
 	quest_tracker = scene_root.get_node_or_null("QuestTracker")
 	if quest_tracker:
-		print("✅ ScenarioController: Found QuestTracker")
+		print("Ã¢Å“â€¦ ScenarioController: Found QuestTracker")
 	else:
-		print("⚠️ ScenarioController: QuestTracker not found (optional)")
+		print("Ã¢Å¡Â Ã¯Â¸Â ScenarioController: QuestTracker not found (optional)")
 	
 	# Find UserStatsHUD
 	user_stats_hud = scene_root.get_node_or_null("UserStatsHUD")
 	if user_stats_hud:
-		print("✅ ScenarioController: Found UserStatsHUD")
+		print("Ã¢Å“â€¦ ScenarioController: Found UserStatsHUD")
 	else:
-		print("⚠️ ScenarioController: UserStatsHUD not found (optional)")
+		print("Ã¢Å¡Â Ã¯Â¸Â ScenarioController: UserStatsHUD not found (optional)")
 	
 	# Find Player
 	player = scene_root.get_node_or_null("Atok")
 	if player:
-		print("✅ ScenarioController: Found Player")
+		print("Ã¢Å“â€¦ ScenarioController: Found Player")
 
 func _connect_signals():
 	"""Connect signals from UI components"""
 	if email_viewer and email_viewer.has_signal("continue_pressed"):
 		email_viewer.continue_pressed.connect(_on_email_continue)
-		print("✅ ScenarioController: Connected to email_viewer.continue_pressed")
+		print("Ã¢Å“â€¦ ScenarioController: Connected to email_viewer.continue_pressed")
 	
 	if decision_prompt and decision_prompt.has_signal("option_selected"):
 		decision_prompt.option_selected.connect(_on_decision_made)
-		print("✅ ScenarioController: Connected to decision_prompt.option_selected")
+		print("Ã¢Å“â€¦ ScenarioController: Connected to decision_prompt.option_selected")
 	
 	if educational_debrief and educational_debrief.has_signal("continue_pressed"):
 		educational_debrief.continue_pressed.connect(_on_debrief_continue)
-		print("✅ ScenarioController: Connected to educational_debrief.continue_pressed")
+		print("Ã¢Å“â€¦ ScenarioController: Connected to educational_debrief.continue_pressed")
 
 # ========================================
 # MAIN FLOW FUNCTIONS
@@ -151,7 +151,7 @@ func _connect_signals():
 
 func start_scenario():
 	"""Start the phishing scenario - called by NPC Adam"""
-	print("🎬 ScenarioController: Starting scenario")
+	print("Ã°Å¸Å½Â¬ ScenarioController: Starting scenario")
 	
 	# Update quest tracker
 	if quest_tracker and quest_tracker.has_method("show_quest"):
@@ -167,14 +167,14 @@ func start_scenario():
 	
 	# Show the phishing email
 	if email_viewer and email_viewer.has_method("display_email"):
-		print("📧 ScenarioController: Displaying email...")
+		print("Ã°Å¸â€œÂ§ ScenarioController: Displaying email...")
 		email_viewer.display_email(email_data)
 	else:
-		push_error("❌ ScenarioController: Cannot display email!")
+		push_error("Ã¢ÂÅ’ ScenarioController: Cannot display email!")
 
 func _on_email_continue():
 	"""Called when player clicks 'Continue' on email"""
-	print("➡️ ScenarioController: Email viewed, showing decision prompt...")
+	print("Ã¢Å¾Â¡Ã¯Â¸Â ScenarioController: Email viewed, showing decision prompt...")
 	
 	# Update quest
 	if quest_tracker and quest_tracker.has_method("update_objective"):
@@ -187,7 +187,7 @@ func _on_email_continue():
 	if email_viewer and email_viewer.has_method("hide_email"):
 		await email_viewer.hide_email()
 	
-	# ⭐ CRITICAL FIX: Pass 'false' as last parameter to hide points for beginner
+	# Ã¢Â­Â CRITICAL FIX: Pass 'false' as last parameter to hide points for beginner
 	if decision_prompt and decision_prompt.has_method("setup_prompt"):
 		decision_prompt.setup_prompt(
 			decision_question,
@@ -196,15 +196,15 @@ func _on_email_continue():
 			option_points,
 			"Think about the red flags: urgency, suspicious sender, too good to be true...",  # Hint
 			0.0,    # No time limit for beginner
-			false   # ⭐ HIDE POINT VALUES FOR BEGINNER MODE
+			false   # Ã¢Â­Â HIDE POINT VALUES FOR BEGINNER MODE
 		)
-		print("✔ ScenarioController: Decision prompt shown (beginner mode - points hidden)")
+		print("Ã¢Ââ€œ ScenarioController: Decision prompt shown (beginner mode - points hidden)")
 	else:
-		push_error("❌ ScenarioController: Cannot show decision prompt!")
+		push_error("Ã¢ÂÅ’ ScenarioController: Cannot show decision prompt!")
 
 func _on_decision_made(option_index: int, option_text: String, points: int):
 	"""Called when player selects an option"""
-	print("✅ ScenarioController: Decision made")
+	print("Ã¢Å“â€¦ ScenarioController: Decision made")
 	print("   Option Index: %d" % option_index)
 	print("   Option Text: %s" % option_text)
 	print("   Points: %d" % points)
@@ -213,19 +213,26 @@ func _on_decision_made(option_index: int, option_text: String, points: int):
 	current_score += points
 	print("   Current Score: %d" % current_score)
 	
-	# Update score in HUD
-	if user_stats_hud and user_stats_hud.has_method("update_score"):
-		user_stats_hud.update_score(current_score)
-	
 	# Check if correct
 	var is_correct = (option_index == correct_answer_index)
 	
-	# ✅ Notify ScenarioCompletion system
+	# Update score in HUD using add_score/subtract_score (not update_score which sets absolute value)
+	if user_stats_hud:
+		if points > 0 and user_stats_hud.has_method("add_score"):
+			user_stats_hud.add_score(points)
+			print("   âœ… Added %d points to HUD" % points)
+		elif points < 0 and user_stats_hud.has_method("subtract_score"):
+			user_stats_hud.subtract_score(abs(points))
+			print("   âš ï¸ Subtracted %d points from HUD" % abs(points))
+	else:
+		push_error("   âŒ UserStatsHUD not found!")
+	
+	# âœ… Notify ScenarioCompletion system for quest tracking
 	if is_correct:
-		ScenarioCompletion.notify_correct_answer(points)
 		ScenarioCompletion.complete_scenario(current_scenario_id, points)
 	else:
-		ScenarioCompletion.notify_wrong_answer(abs(points))  # Use absolute value for penalty
+		# Still complete the scenario but with negative points
+		ScenarioCompletion.complete_scenario(current_scenario_id, points)
 	
 	# Track this scenario as completed
 	if not completed_scenarios.has(current_scenario_id):
@@ -264,39 +271,18 @@ func _on_decision_made(option_index: int, option_text: String, points: int):
 	
 	# Show educational debrief
 	if educational_debrief and educational_debrief.has_method("show_debrief"):
-		print("📚 ScenarioController: Showing educational debrief...")
+		print("Ã°Å¸â€œÅ¡ ScenarioController: Showing educational debrief...")
 		educational_debrief.show_debrief(debrief_dict)
 	else:
-		push_error("❌ ScenarioController: Cannot show debrief!")
+		push_error("Ã¢ÂÅ’ ScenarioController: Cannot show debrief!")
 
 func _on_debrief_continue():
 	"""Called when player finishes reading debrief"""
-	print("✅ ScenarioController: Scenario complete!")
+	print("Ã¢Å“â€¦ ScenarioController: Scenario complete!")
 	
-	# ✅ FIX: Notify quest tracker with correct method
-	if quest_tracker:
-		# Get current scene filename
-		var scene_name = get_tree().current_scene.scene_file_path.get_file()
-		print("📋 Notifying quest tracker for scene: ", scene_name)
-		
-		# Call the correct method: complete_scene() not complete_quest()
-		if quest_tracker.has_method("complete_scene"):
-			quest_tracker.complete_scene(scene_name)
-		elif quest_tracker.has_method("mark_task_complete"):
-			# Alternative: use task ID directly
-			var task_id = scene_name.replace(".tscn", "_complete")
-			quest_tracker.mark_task_complete(task_id)
-	
-	# ✅ NEW: Show completion dialogue
-	var dialogue_box = get_tree().current_scene.find_child("DialogueBox", true, false)
-	if dialogue_box and dialogue_box.has_method("show_dialogue"):
-		dialogue_box.show_dialogue("System", [
-			"🎉 Excellent work!",
-			"You've completed this phishing awareness task.",
-			"Check your quest tracker to see your progress!"
-		])
-		# Wait for dialogue to finish
-		await get_tree().create_timer(3.0).timeout
+	# Complete quest
+	if quest_tracker and quest_tracker.has_method("complete_quest"):
+		quest_tracker.complete_quest()
 	
 	# Hide debrief
 	if educational_debrief and educational_debrief.has_method("hide_debrief"):
@@ -311,8 +297,8 @@ func _on_debrief_continue():
 	# TODO: Mark scenario as complete in user progress
 	# TODO: Update leaderboard if high score
 	
-	print("🎮 ScenarioController: Player can move again")
-	print("📊 Final Score: %d" % current_score)
+	print("ðŸŽ® ScenarioController: Player can move again")
+	print("ðŸ“Š Final Score: %d" % current_score)
 
 # ========================================
 # QUEST TRACKER HELPER METHODS

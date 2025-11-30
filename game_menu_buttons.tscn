@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://dedrvueashcev"]
 
-[ext_resource type="Script" path="res://game_menu_buttons.gd" id="1"]
+[ext_resource type="Script" uid="uid://xyvxn4maymo6" path="res://game_menu_buttons.gd" id="1"]
 
 [node name="GameMenuButtons" type="CanvasLayer"]
 layer = 100

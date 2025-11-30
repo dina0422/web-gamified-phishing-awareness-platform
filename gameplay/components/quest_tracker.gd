@@ -26,14 +26,14 @@ const ROLE_REQUIREMENTS := {
 				"display": "Check your phone in the living room",
 				"hint": "Talk to Adam to get started",
 				"scene": "living_room.tscn",
-				"icon": "🏠"
+				"icon": "[HOME]"
 			},
 			"home_office": {
 				"id": "home_office_complete",
 				"display": "Check your computer in the home office",
 				"hint": "Navigate upstairs to the office",
 				"scene": "home_office.tscn",
-				"icon": "💼"
+				"icon": "[WORK]"
 			}
 		}
 	}
@@ -50,6 +50,8 @@ func _ready():
 	detect_current_role()
 	
 	await get_tree().process_frame
+	# Check for fresh start from role selection
+	check_fresh_start()
 	
 	setup_panel_sizing()
 	setup_ui_elements()
@@ -60,14 +62,14 @@ func _ready():
 	# Show intro animation
 	show_intro_animation()
 	
-	print("✅ QuestTracker Ready - Role: %s, Tasks: %d" % [current_role, total_tasks])
+	print("[OK] QuestTracker Ready - Role: %s, Tasks: %d" % [current_role, total_tasks])
 
 func setup_panel_sizing():
-	"""Ensure panel is properly sized"""
-	panel.custom_minimum_size = Vector2(420, 260)
-	panel.size = Vector2(420, 260)
-	panel.offset_right = panel.offset_left + 420
-	panel.offset_bottom = panel.offset_top + 260
+	"""Ensure panel is properly sized - compact version"""
+	panel.custom_minimum_size = Vector2(340, 200)
+	panel.size = Vector2(340, 200)
+	panel.offset_right = panel.offset_left + 340
+	panel.offset_bottom = panel.offset_top + 200
 	
 	var margin_container = $Panel/MarginContainer
 	margin_container.anchors_preset = Control.PRESET_FULL_RECT
@@ -75,13 +77,21 @@ func setup_panel_sizing():
 	margin_container.anchor_bottom = 1.0
 	margin_container.set_offsets_preset(Control.PRESET_FULL_RECT)
 	
+	# Set compact margins
+	margin_container.add_theme_constant_override("margin_left", 15)
+	margin_container.add_theme_constant_override("margin_top", 15)
+	margin_container.add_theme_constant_override("margin_right", 15)
+	margin_container.add_theme_constant_override("margin_bottom", 15)
+	
 	var vbox = $Panel/MarginContainer/VBoxContainer
 	vbox.custom_minimum_size = Vector2(0, 0)
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.add_theme_constant_override("separation", 8)  # Tighter spacing
 	
 	if quest_title:
-		quest_title.custom_minimum_size = Vector2(380, 0)
-		quest_title.autowrap_mode = TextServer.AUTOWRAP_OFF
+		quest_title.custom_minimum_size = Vector2(310, 0)
+		quest_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		quest_title.add_theme_font_size_override("font_size", 16)  # Smaller font
 
 func show_intro_animation():
 	"""Show intro message then fade to minimized icon"""
@@ -166,10 +176,11 @@ func setup_ui_elements():
 	if not minimize_button:
 		minimize_button = Button.new()
 		minimize_button.name = "MinimizeButton"
-		minimize_button.text = "−"
+		minimize_button.text = "−"  # Minus symbol
 		minimize_button.custom_minimum_size = Vector2(30, 30)
-		minimize_button.position = Vector2(panel.size.x - 40, 10)
-		minimize_button.add_theme_font_size_override("font_size", 24)
+		minimize_button.position = Vector2(300, 8)  # Top right for compact panel
+		minimize_button.add_theme_font_size_override("font_size", 20)
+		minimize_button.tooltip_text = "Minimize (Tab)"
 		minimize_button.pressed.connect(minimize)
 		panel.add_child(minimize_button)
 	
@@ -178,10 +189,11 @@ func setup_ui_elements():
 	if not minimized_icon:
 		minimized_icon = Button.new()
 		minimized_icon.name = "MinimizedIcon"
-		minimized_icon.text = "📋"
+		minimized_icon.text = "📋"  # Clipboard icon
 		minimized_icon.custom_minimum_size = Vector2(50, 50)
 		minimized_icon.position = Vector2(20, 20)
-		minimized_icon.add_theme_font_size_override("font_size", 28)
+		minimized_icon.add_theme_font_size_override("font_size", 24)
+		minimized_icon.tooltip_text = "Expand Quest Tracker (Tab)"
 		minimized_icon.pressed.connect(maximize)
 		minimized_icon.hide()
 		add_child(minimized_icon)
@@ -229,7 +241,7 @@ func create_task_item(task_data: Dictionary) -> void:
 	var status_label = Label.new()
 	status_label.name = "StatusLabel"
 	status_label.custom_minimum_size = Vector2(30, 0)
-	status_label.text = "✅" if task_data["id"] in completed_tasks else "⬜"
+	status_label.text = "[X]" if task_data["id"] in completed_tasks else "[ ]"
 	status_label.modulate = Color(0.2, 1.0, 0.2) if task_data["id"] in completed_tasks else Color(0.6, 0.6, 0.6)
 	task_container.add_child(status_label)
 	
@@ -238,19 +250,19 @@ func create_task_item(task_data: Dictionary) -> void:
 	
 	var task_label = Label.new()
 	task_label.name = "TaskLabel"
-	task_label.text = "%s %s" % [task_data.get("icon", "📌"), task_data["display"]]
+	task_label.text = "%s %s" % [task_data.get("icon", ""), task_data["display"]]
 	task_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	task_label.add_theme_font_size_override("font_size", 14)
 	
 	if task_data["id"] in completed_tasks:
 		task_label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-		task_label.text += " ✓"
+		task_label.text += " "
 	
 	details_container.add_child(task_label)
 	
 	if task_data["id"] not in completed_tasks and task_data.get("hint", "") != "":
 		var hint_label = Label.new()
-		hint_label.text = "💡 " + task_data["hint"]
+		hint_label.text = " " + task_data["hint"]
 		hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		hint_label.add_theme_font_size_override("font_size", 12)
 		hint_label.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
@@ -272,7 +284,7 @@ func update_all_displays() -> void:
 
 func update_progress_display() -> void:
 	if progress_label:
-		progress_label.text = "📊 Progress: %d / %d" % [completed_tasks.size(), total_tasks]
+		progress_label.text = " Progress: %d / %d" % [completed_tasks.size(), total_tasks]
 		
 		if completed_tasks.size() >= total_tasks:
 			progress_label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.2))
@@ -285,13 +297,13 @@ func update_task_displays() -> void:
 		var is_complete = task_id in completed_tasks
 		
 		if is_complete:
-			task_ui["status"].text = "✅"
+			task_ui["status"].text = "[OK]"
 			task_ui["status"].modulate = Color(0.2, 1.0, 0.2)
 			task_ui["label"].add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
-			if not " ✓" in task_ui["label"].text:
-				task_ui["label"].text += " ✓"
+			if not " " in task_ui["label"].text:
+				task_ui["label"].text += " "
 		else:
-			task_ui["status"].text = "⬜"
+			task_ui["status"].text = ""
 			task_ui["status"].modulate = Color(0.6, 0.6, 0.6)
 
 func load_role_progress() -> void:
@@ -305,7 +317,7 @@ func load_role_progress() -> void:
 			file.close()
 			if typeof(json) == TYPE_DICTIONARY:
 				completed_tasks = json.get("completed_tasks", [])
-				print("✅ Loaded progress: %d/%d tasks" % [completed_tasks.size(), total_tasks])
+				print("[OK] Loaded progress: %d/%d tasks" % [completed_tasks.size(), total_tasks])
 
 func save_role_progress() -> void:
 	if current_role == "":
@@ -320,18 +332,59 @@ func save_role_progress() -> void:
 	if file:
 		file.store_string(JSON.stringify(save_data))
 		file.close()
-		print("💾 Progress saved: %d/%d tasks" % [completed_tasks.size(), total_tasks])
+		print(" Progress saved: %d/%d tasks" % [completed_tasks.size(), total_tasks])
+
+func reset_progress() -> void:
+	"""Reset all progress for current role - used when restarting level"""
+	if current_role == "":
+		return
+	
+	# Clear in-memory progress
+	completed_tasks.clear()
+	
+	# Delete save file
+	var save_path := "user://role_progress_%s.json" % current_role
+	if FileAccess.file_exists(save_path):
+		DirAccess.remove_absolute(save_path)
+		print("Progress file deleted: %s" % save_path)
+	
+	# Update displays
+	update_all_displays()
+	
+	print("Progress reset for role: %s" % current_role)
+
+static func reset_role_progress_static(role: String) -> void:
+	"""Static method to reset progress from outside the quest tracker"""
+	var save_path := "user://role_progress_%s.json" % role
+	if FileAccess.file_exists(save_path):
+		DirAccess.remove_absolute(save_path)
+		print("Progress file deleted (static): %s" % save_path)
+
+func check_fresh_start() -> void:
+	"""Check if this is a fresh start from role selection"""
+	# Check if Global autoload exists and has fresh_start flag
+	if not has_node("/root/Global"):
+		print("No Global autoload found - skipping fresh start check")
+		return
+	
+	var global_node = get_node("/root/Global")
+	if global_node.has_method("consume_fresh_start_flag"):
+		var is_fresh_start = global_node.consume_fresh_start_flag()
+		if is_fresh_start:
+			print("Fresh start detected - resetting progress for: %s" % current_role)
+			reset_progress()
+
 
 func mark_task_complete(task_id: String) -> void:
 	if task_id in completed_tasks:
-		print("⚠️ Task already completed: %s" % task_id)
+		print(" Task already completed: %s" % task_id)
 		return
 	
 	completed_tasks.append(task_id)
 	save_role_progress()
 	update_all_displays()
 	
-	print("✅ Task completed: %s (%d/%d)" % [task_id, completed_tasks.size(), total_tasks])
+	print("[OK] Task completed: %s (%d/%d)" % [task_id, completed_tasks.size(), total_tasks])
 	
 	# Flash the updated checkbox
 	if task_id in task_labels:
@@ -348,8 +401,8 @@ func complete_scene(scene_name: String) -> void:
 	mark_task_complete(task_id)
 
 func on_role_completed() -> void:
-	print("🎉 Role Completed: %s" % current_role)
-	quest_title.text = "🎉 Congratulations!"
+	print(" Role Completed: %s" % current_role)
+	quest_title.text = " Congratulations!"
 	
 	# Maximize to show completion
 	if is_minimized:

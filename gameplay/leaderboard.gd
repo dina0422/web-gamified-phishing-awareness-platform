@@ -14,28 +14,28 @@ extends Control
 # ============================================
 
 @onready var title_label: Label = $Label
-@onready var leaderboard_container: GridContainer = $Label/VBoxContainer/GridContainer
+@onready var leaderboard_container: GridContainer = $VBoxContainer/GridContainer
 @onready var back_button: Button = $BackButton
 @onready var restart_button: Button = $RestartButton
-@onready var role_filter_options: OptionButton = $RoleFilterOptions
-@onready var sort_options: OptionButton = $SortOptions
+@onready var role_filter_options: OptionButton = $ControlsContainer/RoleFilterOptions
+@onready var sort_options: OptionButton = $ControlsContainer/SortOptions
 @onready var player_rank_panel: Panel = $PlayerRankPanel
 @onready var rank_label: Label = $PlayerRankPanel/HBoxContainer/RankLabel
 @onready var player_name_label: Label = $PlayerRankPanel/HBoxContainer/PlayerNameLabel
 @onready var player_score_label: Label = $PlayerRankPanel/HBoxContainer/PlayerScoreLabel
 @onready var badge_icon: TextureRect = $PlayerRankPanel/HBoxContainer/BadgeIcon
 @onready var completion_popup: Panel = $CompletionPopup
-@onready var refresh_button: Button = $RefreshButton
+@onready var refresh_button: Button = $ControlsContainer/RefreshButton
 
 # ============================================
 # CONSTANTS
 # ============================================
 
 const ROLE_NAMES := {
-	"all": "All Roles ðŸŒ",
-	"beginner": "Civilian ðŸ'¨â€ðŸ'¼",
-	"intermediate": "Office Staff ðŸ'¼",
-	"professional": "Cybersecurity Pro ðŸ›¡ï¸"
+	"all": "All Roles",
+	"beginner": "Civilian",
+	"intermediate": "Office Staff",
+	"professional": "Cybersecurity Pro"
 }
 
 # Badge thresholds for each role
@@ -59,10 +59,10 @@ const BADGE_THRESHOLDS := {
 
 # Badge emojis
 const BADGE_ICONS := {
-	"gold": "ðŸ¥‡",
-	"silver": "ðŸ¥ˆ",
-	"bronze": "ðŸ¥‰",
-	"none": "ðŸ†"
+	"gold": "[GOLD]",
+	"silver": "[SILVER]",
+	"bronze": "[BRONZE]",
+	"none": "[BADGE]"
 }
 
 # ============================================
@@ -82,6 +82,12 @@ var is_showing_completion: bool = false
 func _ready() -> void:
 	print("\n=== Leaderboard Initializing ===")
 	
+	# Verify critical nodes exist
+	if not leaderboard_container:
+		push_error("âš ï¸ CRITICAL: leaderboard_container (GridContainer) not found!")
+		push_error("Expected path: $Label/VBoxContainer/GridContainer")
+		return
+	
 	# Setup UI components
 	setup_filters()
 	setup_buttons()
@@ -100,7 +106,7 @@ func _ready() -> void:
 func setup_filters() -> void:
 	"""Setup filter dropdown options"""
 	if not role_filter_options:
-		push_error("âŒ RoleFilterOptions not found!")
+		push_error("âš ï¸ RoleFilterOptions not found!")
 		return
 	
 	role_filter_options.clear()
@@ -136,9 +142,10 @@ func setup_buttons() -> void:
 
 func load_leaderboard_data() -> void:
 	"""Load leaderboard data from Firebase"""
-	print("📥 Firebase: Loading leaderboard data from Firebase...")	
+	print("ðŸ“¥ Firebase: Loading leaderboard data from Firebase...")	
 	if Firebase.id_token == "":
-		push_error("âŒ Cannot load leaderboard - not authenticated")
+		push_error("âš ï¸ Cannot load leaderboard - not authenticated")
+		display_empty_leaderboard()
 		return
 	
 	# Build Firestore query URL
@@ -150,8 +157,9 @@ func load_leaderboard_data() -> void:
 	
 	var err := http.request(query_url, headers, HTTPClient.METHOD_GET)
 	if err != OK:
-		push_error("âŒ Failed to start leaderboard request")
+		push_error("âš ï¸ Failed to start leaderboard request")
 		http.queue_free()
+		display_empty_leaderboard()
 		return
 	
 	var result = await http.request_completed
@@ -164,7 +172,8 @@ func load_leaderboard_data() -> void:
 	if response_code == 200:
 		parse_leaderboard_response(response_text)
 	else:
-		push_error("âŒ Leaderboard load failed (HTTP %d): %s" % [response_code, response_text])
+		push_error("âš ï¸ Leaderboard load failed (HTTP %d): %s" % [response_code, response_text])
+		display_empty_leaderboard()
 
 func build_leaderboard_query_url() -> String:
 	"""Build Firebase Firestore query URL with filters"""
@@ -185,7 +194,7 @@ func parse_leaderboard_response(response_text: String) -> void:
 	var json_result = JSON.parse_string(response_text)
 	
 	if not json_result or not json_result.has("documents"):
-		print("â„¹ï¸ No leaderboard data found")
+		print("â„¹ï¸ No leaderboard data found")
 		display_empty_leaderboard()
 		return
 	
@@ -241,6 +250,11 @@ func sort_leaderboard_data() -> void:
 
 func display_leaderboard() -> void:
 	"""Display leaderboard entries in the grid"""
+	# Verify container exists
+	if not leaderboard_container:
+		push_error("âš ï¸ Cannot display leaderboard - container is null!")
+		return
+	
 	# Clear existing entries (except header)
 	clear_leaderboard_grid()
 	
@@ -249,45 +263,32 @@ func display_leaderboard() -> void:
 	
 	for i in range(display_count):
 		var entry = leaderboard_data[i]
-		var rank = i + 1
+		var rank: int = i + 1
 		
-		# Create rank label
-		var rank_label := create_leaderboard_label(str(rank), true)
-		leaderboard_container.add_child(rank_label)
+		# Rank label
+		var rank_label_node := create_leaderboard_label("#%d" % rank)
+		highlight_label(rank_label_node) if entry["uid"] == Firebase.uid else null
+		leaderboard_container.add_child(rank_label_node)
 		
-		# Create name label with badge
+		# Player name label with badge
 		var badge = get_badge_for_score(entry["score"], entry["role"])
-		var name_text = "%s %s" % [BADGE_ICONS[badge], entry["displayName"]]
-		var name_label := create_leaderboard_label(name_text, false)
+		var badge_emoji = BADGE_ICONS[badge]
+		var name_text = "%s %s" % [badge_emoji, entry["displayName"]]
+		var name_label := create_leaderboard_label(name_text)
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		highlight_label(name_label) if entry["uid"] == Firebase.uid else null
 		leaderboard_container.add_child(name_label)
 		
-		# Create score label
-		var score_label := create_leaderboard_label(str(entry["score"]), true)
+		# Score label
+		var score_label := create_leaderboard_label(str(entry["score"]))
+		highlight_label(score_label) if entry["uid"] == Firebase.uid else null
 		leaderboard_container.add_child(score_label)
-		
-		# Highlight current player
-		if entry["uid"] == Firebase.uid:
-			highlight_label(rank_label)
-			highlight_label(name_label)
-			highlight_label(score_label)
 
-func create_leaderboard_label(text: String, centered: bool = false) -> Label:
-	"""Create a styled label for leaderboard entry"""
+func create_leaderboard_label(text: String, centered: bool = true) -> Label:
+	"""Helper to create consistently styled labels"""
 	var label := Label.new()
 	label.text = text
-	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	
-	# Apply styling
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.6, 0.6, 0.6, 0)
-	style.border_width_left = 1
-	style.border_width_top = 1
-	style.border_width_right = 1
-	style.border_width_bottom = 1
-	style.border_color = Color(0, 1, 0, 1)
-	
-	label.add_theme_stylebox_override("normal", style)
+	label.add_theme_font_size_override("font_size", 18)
 	
 	if centered:
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -299,7 +300,11 @@ func highlight_label(label: Label) -> void:
 	label.add_theme_color_override("font_color", Color.YELLOW)
 
 func clear_leaderboard_grid() -> void:
-	"""Remove all entries except header row"""
+	"""Delete all entries except header row"""
+	if not leaderboard_container:
+		push_error("âš ï¸ Cannot clear grid - leaderboard_container is null!")
+		return
+	
 	var children = leaderboard_container.get_children()
 	# Keep first 3 children (header: Rank, Player, Score)
 	for i in range(3, children.size()):
@@ -307,6 +312,9 @@ func clear_leaderboard_grid() -> void:
 
 func display_empty_leaderboard() -> void:
 	"""Show message when no data available"""
+	if not leaderboard_container:
+		return
+	
 	clear_leaderboard_grid()
 	
 	var message := create_leaderboard_label("No data available", true)
@@ -429,9 +437,16 @@ func show_completion_popup(role: String) -> void:
 	
 	# This assumes you have labels in the completion popup
 	# Adjust node paths as needed
-	$CompletionPopup/TitleLabel.text = "ðŸŽ‰ %s Completed!" % ROLE_NAMES.get(role, role)
-	$CompletionPopup/ScoreLabel.text = "Final Score: %d" % player_data.get("score", 0)
-	$CompletionPopup/BadgeLabel.text = "Badge Earned: %s %s" % [badge_emoji, badge.capitalize()]
+	var title_label_node = completion_popup.get_node_or_null("VBoxContainer/TitleLabel")
+	var score_label_node = completion_popup.get_node_or_null("VBoxContainer/ScoreLabel")
+	var badge_label_node = completion_popup.get_node_or_null("VBoxContainer/BadgeLabel")
+	
+	if title_label_node:
+		title_label_node.text = "ðŸŽ‰ %s Completed!" % ROLE_NAMES.get(role, role)
+	if score_label_node:
+		score_label_node.text = "Final Score: %d" % player_data.get("score", 0)
+	if badge_label_node:
+		badge_label_node.text = "Badge Earned: %s %s" % [badge_emoji, badge.capitalize()]
 	
 	# Load full leaderboard to show rank
 	load_leaderboard_data()
@@ -452,27 +467,37 @@ func _on_role_filter_changed(index: int) -> void:
 	"""Handle role filter dropdown change"""
 	var roles = ["all", "beginner", "intermediate", "professional"]
 	current_role_filter = roles[index]
-	print("🔄 Filter changed to: ", current_role_filter)
+	print("ðŸ”„ Filter changed to: ", current_role_filter)
 	load_leaderboard_data()
 
 func _on_sort_changed(index: int) -> void:
 	"""Handle sort option change"""
 	var sort_modes = ["score_desc", "score_asc", "name", "date"]
 	current_sort_mode = sort_modes[index]
-	print("🔄 Sort changed to: ", current_sort_mode)
+	print("ðŸ”„ Sort changed to: ", current_sort_mode)
 	sort_leaderboard_data()
 	display_leaderboard()
 
 func _on_back_pressed() -> void:
 	"""Return to main menu"""
-	print("â¬…ï¸ Returning to main menu")
+	print("â¬…ï¸ Returning to main menu")
 	get_tree().change_scene_to_file("res://main_menu.tscn")
 
 func _on_restart_pressed() -> void:
 	"""Restart current role"""
 	if is_showing_completion and player_data.has("role"):
-		"🔄 Restarting role: "		# Determine which scene to load based on role
-		match player_data["role"]:
+		var role = player_data["role"]
+		print("Restarting role: %s" % role)
+		
+		# CRITICAL: Reset quest progress before restarting
+		# Load quest_tracker script and call static reset method
+		var quest_tracker_script = load("res://quest_tracker.gd")
+		if quest_tracker_script:
+			quest_tracker_script.reset_role_progress_static(role)
+			print("Quest progress cleared for: %s" % role)
+		
+		# Determine which scene to load based on role
+		match role:
 			"beginner":
 				get_tree().change_scene_to_file("res://living_room.tscn")
 			"intermediate":
@@ -480,11 +505,11 @@ func _on_restart_pressed() -> void:
 			"professional":
 				get_tree().change_scene_to_file("res://soc_office.tscn")
 	else:
-		print("â„¹ï¸ No active role to restart")
+		print("No active role to restart")
 
 func _on_refresh_pressed() -> void:
 	"""Manually refresh leaderboard data"""
-	print("🔄 Refreshing leaderboard...")
+	print("ðŸ”„ Refreshing leaderboard...")
 	load_leaderboard_data()
 
 # ============================================

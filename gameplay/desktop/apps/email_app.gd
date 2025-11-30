@@ -257,7 +257,6 @@ func _show_email_viewer(email_data: Dictionary):
 	if sender_email:
 		sender_email.text = "<noreply@example.com>"  # Would extract from email_data
 	
-	# Update body in ScrollContainer
 	var body_scroll = viewer.get_node_or_null("EmailBody/BodyScroll")
 	if body_scroll:
 		var body_label = body_scroll.get_node_or_null("BodyText")

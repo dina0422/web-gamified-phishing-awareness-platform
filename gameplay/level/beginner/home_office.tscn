@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bfb0x7gl7h7be"]
+[gd_scene load_steps=16 format=3 uid="uid://bfb0x7gl7h7be"]
 
 [ext_resource type="Texture2D" uid="uid://bej3fu3b0j2cu" path="res://assets/Modern tiles_Free/Interiors_free/16x16/Interiors_free_16x16.png" id="1_lknih"]
 [ext_resource type="Texture2D" uid="uid://6wb2y7fwaobq" path="res://assets/Modern tiles_Free/6_Home_Designs/Generic_Home_Designs/16x16/Generic_Home_1_Layer_1.png" id="2_nnp1u"]
@@ -7,8 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bmaj15k31w0b7" path="res://player/atok.tscn" id="5_mdfos"]
 [ext_resource type="PackedScene" uid="uid://bph1je1mgvr1i" path="res://gameplay/components/scene_trigger.tscn" id="6_h5fal"]
 [ext_resource type="PackedScene" uid="uid://vcglmxjjnb7j" path="res://gameplay/components/interaction_components/chair.tscn" id="7_hh78q"]
-[ext_resource type="PackedScene" path="res://gameplay/components/quest_tracker.tscn" id="8_l878g"]
-[ext_resource type="PackedScene" path="res://game_menu_buttons.tscn" id="9_l878g"]
+[ext_resource type="PackedScene" uid="uid://dedrvueashcev" path="res://game_menu_buttons.tscn" id="9_l878g"]
 [ext_resource type="PackedScene" uid="uid://crpamacrvjtku" path="res://gameplay/components/userStats/user_stats_hud.tscn" id="9_s2vc6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7ieeo"]
@@ -2302,7 +2301,5 @@ position = Vector2(369, 268)
 layer = 200
 
 [node name="GameMenuButtons" parent="." instance=ExtResource("9_l878g")]
-
-[node name="QuestTracker" parent="." instance=ExtResource("8_l878g")]
 
 [connection signal="body_entered" from="SceneTrigger" to="SceneTrigger" method="_on_body_entered"]

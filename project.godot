@@ -19,6 +19,8 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 ScenarioManager="*res://scripts/scenario_manager.gd"
 Firebase="*res://scripts/firebase_manager.gd"
 ScenarioCompletion="*res://scenario_completion_helper.gd"
+TranslationManager="*res://translation_manager.gd"
+Global="*res://global.gd"
 
 [display]
 
