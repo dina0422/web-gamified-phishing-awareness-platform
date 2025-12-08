@@ -82,12 +82,11 @@ PhishProof/
 - **Noto Sans SC** - Chinese character support
 
 ### Graphics & Icons
-- **Modern Office & Interior Tiles** - [CupNooble on itch.io](https://cupnooble.itch.io/modern-interior-16x16)
-- **App Icons & Symbol Icons** - [Wanicon Pack](https://www.figma.com/community/file/1316945826650166463/wanicon)
+- **Modern Office & Interior Tiles** - [LimeZu on itch.io](https://limezu.itch.io/moderninteriors)
 - **Pixel Art Phone Sprite** - Custom design
 
 ### Game Assets
-- **Character Sprites** - Custom pixel art
+- **Character Sprites** - [Markvelyx on itch.io](https://markvelyx.itch.io/random-npcs)
 - **UI Elements** - Custom Godot StyleBoxFlat designs
 
 ---
