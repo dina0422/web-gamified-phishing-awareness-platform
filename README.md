@@ -1,4 +1,4 @@
-# PhishProof 2.0 🎮🔒
+# PhishProof 2.0
 
 **Live Demo:** [phishproof-c6037.web.app](https://phishproof-c6037.web.app)
 
@@ -6,7 +6,7 @@ A culturally-adaptive, web-gamified phishing awareness training platform featuri
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysia that educates users about phishing threats through interactive gameplay. Players navigate authentic digital environments, make critical decisions, and learn to identify Malaysian-specific phishing attempts including:
 
@@ -18,7 +18,7 @@ PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysi
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
 - **Progressive Difficulty System**: Three levels (Beginner, Intermediate, Professional) with role-based scenarios
 - **Real-Time Leaderboard**: Global rankings with Firebase Firestore integration
@@ -30,7 +30,7 @@ PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysi
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Game Engine**: Godot 4  
 - **Backend**: Firebase (Authentication, Firestore, Hosting)
@@ -39,9 +39,9 @@ PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysi
 
 ---
 
-## 📦 Current Implementation
+## Current Implementation
 
-### ✅ Completed Features
+### Completed Features
 - Firebase anonymous authentication with display name prompts
 - Real-time Firestore progress saving and leaderboard
 - Beginner level with complete gameplay loop
@@ -51,7 +51,7 @@ PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysi
 - Level selection screen
 - Quest tracker with objective management
 
-### 🚧 In Progress
+### In Progress
 - Intermediate level (Office Staff/HR scenarios)
 - Professional level (IT Admin/SOC scenarios)
 - Additional phishing scenario types
@@ -59,7 +59,7 @@ PhishProof 2.0 is a Final Year Project (FYP) at University of Wollongong Malaysi
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 PhishProof/
@@ -75,7 +75,7 @@ PhishProof/
 
 ---
 
-## 🎨 Asset Credits
+## Asset Credits
 
 ### Fonts
 - **Minecraft Font** - Main UI font
@@ -91,7 +91,7 @@ PhishProof/
 
 ---
 
-## 🔐 Firebase Configuration
+## Firebase Configuration
 
 Project uses secure Firestore rules with proper authentication:
 - User profiles: Owner-only create/update
@@ -100,10 +100,8 @@ Project uses secure Firestore rules with proper authentication:
 
 ---
 
-## 🎓 Academic Context
+## Academic Context
 
-**Institution**: University of Wollongong Malaysia  
-**Course**: Final Year Project (FYP)  
 **Methodology**: Design Science Research  
 **Learning Frameworks**: Flow Theory, Experiential Learning  
 **Target Audience**: Malaysian users across beginner to professional cybersecurity knowledge levels
