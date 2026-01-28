@@ -108,7 +108,7 @@ Project uses secure Firestore rules with proper authentication:
 
 ---
 
-## 📝 License
+## License
 
 This project is an academic work for educational purposes.
 
